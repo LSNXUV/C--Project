@@ -74,7 +74,6 @@ Manager::Manager(/* args */)
     End = Head;
     count = 0;
     
-    // count = countRens(Head);
 }
 
 bool Manager::readFile()
