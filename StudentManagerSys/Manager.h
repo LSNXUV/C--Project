@@ -78,7 +78,6 @@ Manager::Manager(/* args */)
 
 bool Manager::readFile()
 {
-    // saveFile();
     if(!Head->next) 
     {
         FILE *fpw = fopen("Students.txt", "w");
