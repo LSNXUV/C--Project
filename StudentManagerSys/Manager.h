@@ -33,6 +33,8 @@ class Manager:public StuSys
         bool readFile();
         bool saveFile();
 
+        void EmptyRemind();
+
         void welcome(int delay);
         void menu();
 
@@ -68,8 +70,8 @@ class Manager:public StuSys
 Manager::Manager(/* args */)
 {
     Head =  new Student;
-    Head->next = new Student;
-    End = Head->next;
+    Head->next = NULL;
+    End = Head;
     count = 0;
     
     // count = countRens(Head);
@@ -77,7 +79,13 @@ Manager::Manager(/* args */)
 
 bool Manager::readFile()
 {
-    FILE *fpr = fopen("studentInfo.txt", "r");
+    // saveFile();
+    if(!Head->next) 
+    {
+        FILE *fpw = fopen("Students.txt", "w");
+        fclose(fpw); //关闭文件指针
+    }
+    FILE *fpr = fopen("Students.txt", "r");
 	Student st;
 	// Student *s;
 
@@ -110,15 +118,16 @@ bool Manager::saveFile()
 {
     //排序
 
-    FILE *fpw = fopen("studentInfo.txt", "w");
+    FILE *fpw = fopen("Students.txt", "w");
+
 	if (!fpw)
 		return false;
 
 	Student *p = Head->next;
-
+    if(!p)
+        return true;
 	while (p)
 	{
-
 		fprintf(fpw, "%d %s %s %d %d %d %d %d %d\n",
         p->id, p->name, p->sex, p->ma, p->en, p->et, p->pc, p->avr, p->sum);
 		p = p->next;
@@ -126,6 +135,19 @@ bool Manager::saveFile()
 
 	fclose(fpw); //关闭文件指针
 	return true;
+}
+
+void Manager::EmptyRemind()
+{
+    cout<<"\n";
+    SetTextGreen();
+    for(int i = 3;i>=1;i--)
+    {
+        printf("                      当前无学生信息，请先添加学生信息  %d 秒后自动退出",i);
+        Sleep(1000);
+        cout<<"\r";
+    }
+    SetTextWhite();
 }
 
 int Manager::countRens()
@@ -144,20 +166,6 @@ int Manager::countRens()
 	return n;
 }
 
-/* void Manager::copy(Student *s1,Student *s)
-{
-
-    s1->en = s->en,
-    s1->et = s->et;
-    s1->id = s->id,
-    s1->ma = s->ma,
-    s1->pc = s->pc,
-    s1->avr = s->avr,
-    s1->sum = s->sum,
-    strcpy(s1->name,s->name);
-    strcpy(s1->sex,s->sex);
-    s1->next = s->next;
-} */
 
 void Manager::welcome(int delay)
 {
@@ -188,7 +196,7 @@ void Manager::welcome(int delay)
         printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化成功            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
     }
     else{
-        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓文件初始化失败！〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化失败            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
     }
 
 }
@@ -251,7 +259,7 @@ void Manager::AddStu(Student *S)
     End = S;
     End->next = NULL;
 
-    
+    // PrintSingleStu(*End);
     saveFile();
 }
 
@@ -443,7 +451,6 @@ void Manager::PrintAddStu()
 
         AddWelcome(0);
         PrintSingleStu(S);
-        
         printf("\n                                   确认信息?  Y/N");
         while(true)
         { 
@@ -451,7 +458,9 @@ void Manager::PrintAddStu()
             if(choice == 89 || choice == 121) 
             {
                 AddStu(&S); 
-                cout<<"\n                                   添加成功!";
+                SetTextGreen();
+                cout<<"\n\n                                   添加成功!";
+                SetTextWhite();
                 Sleep(2000);
                break;
             }
@@ -527,6 +536,12 @@ void Manager::PrintDeleteStu()
     while(true)
     {
         DelWelcome(20);
+        //判断学生信息是否为空
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
@@ -838,6 +853,12 @@ void Manager::PrintSearchStu()
     while(true)
     {
         SearchWelcome(20);
+        //判断学生信息是否为空
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
@@ -983,7 +1004,7 @@ void Manager::UpdateStu(Student *stu)
     string str;
     int UpdateChoice;
     Student S,*s;
-    if(stu)
+    if(stu->next)
     {
         UpWelcome(20);
         S = *stu->next;
@@ -1001,6 +1022,8 @@ void Manager::UpdateStu(Student *stu)
     {
 
         UpdateChoice = getch();
+        if(UpdateChoice == 96 || UpdateChoice == 48) break;
+    
         switch (UpdateChoice)
         {
         case 49:
@@ -1192,10 +1215,6 @@ void Manager::UpdateStu(Student *stu)
         default:
             break;
         }
-        if(UpdateChoice == 96 || UpdateChoice == 48)
-        {
-            break;
-        }
     }
 
     saveFile();
@@ -1213,10 +1232,19 @@ void Manager::PrintUpdateStu()
     {
         UpdateWelcome(20);
 
+        //判断学生信息是否为空
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
-            if(choice == 78 || choice == 73 || choice == 110 || choice == 105 || choice == 96 || choice == 48)
+            if( choice == 78 || choice == 73 || 
+                choice == 110 || choice == 105 || 
+                choice == 96 || choice == 48
+            )
             {
                 break;
             }

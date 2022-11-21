@@ -17,6 +17,7 @@ public:
 
     bool readFile();
     bool saveFile();
+    void EmptyRemind();
     void welcome(int delay);
     void menu();
 
@@ -34,8 +35,10 @@ public:
 
     void AtWelcome(int delay);
     void PrintAnalyst();
-    void PrintAnalyse();
-    void PrintAnalysis();
+    void IntervalAnalyst();
+    void IntervalAnalysis();
+    void TotalAnalyst();
+    void TotalAnalysis();
 
     void CreatXls();
 
@@ -106,6 +109,11 @@ void Analyst::menu()
     {
 
         welcome(20);
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
@@ -151,7 +159,7 @@ void Analyst::menu()
 
 bool Analyst::readFile()
 {
-    FILE *fpr = fopen("studentInfo.txt", "r");
+    FILE *fpr = fopen("Students.txt", "r");
 	Student st;
 	// Student *s;
     count = 0;
@@ -183,7 +191,7 @@ bool Analyst::saveFile()
 {
 
     //初始化文件指针
-    FILE *fpw = fopen("studentInfo.txt", "w");
+    FILE *fpw = fopen("Students.txt", "w");
     count = 0;
 	if (!fpw)
 		return false;
@@ -200,6 +208,18 @@ bool Analyst::saveFile()
 	return true;
 }
 
+void Analyst::EmptyRemind()
+{
+    cout<<"\n";
+    SetTextGreen();
+    for(int i = 3;i>=1;i--)
+    {
+        printf("                      当前无学生信息，请先添加学生信息  %d 秒后自动退出",i);
+        Sleep(1000);
+        cout<<"\r";
+    }
+    SetTextWhite();
+}
 
 void Analyst::SortById()
 {
@@ -470,6 +490,11 @@ void Analyst::PrintStu()
     {
 
         PtWelcome(20);
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
@@ -557,7 +582,7 @@ void Analyst::AtWelcome(int delay)
     printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
 }
 
-void Analyst::PrintAnalyse()
+void Analyst::TotalAnalyst()
 {
     Student *head;
     int max,min,avr,sum = 0,passRens = 0;
@@ -658,15 +683,13 @@ void Analyst::PrintAnalyse()
     printf(" ──────────────────────────────────────────────────────");Sleep(20);
 }
 
-void Analyst::PrintAnalysis()
+void Analyst::TotalAnalysis()
 {
     if(count == 0)
     {
-        printf("                                     当前无学生信息,请新增学生。 按任意键退出");
-        getch();
+        EmptyRemind();
         return;
     }
-    
     cout<<"\n                ";
     printf(" ──────────────────────────────────────────────────────");Sleep(20);
     cout<<"\n                ";
@@ -675,11 +698,21 @@ void Analyst::PrintAnalysis()
     printf(" ──────────────────────────────────────────────────────");Sleep(20);
 
 
-    PrintAnalyse();
+    TotalAnalyst();
 
 
     printf("                                                       按任意键退出");
     getch();
+}
+
+void Analyst::IntervalAnalyst()
+{
+
+}
+
+void Analyst::IntervalAnalysis()
+{
+
 }
 
 void Analyst::PrintAnalyst()
@@ -689,6 +722,11 @@ void Analyst::PrintAnalyst()
     while(true)
     {
         AtWelcome(20);
+        if(count == 0)
+        {
+            EmptyRemind();
+            break;
+        }
         while(true)
         {
             choice = getch();
@@ -706,7 +744,7 @@ void Analyst::PrintAnalyst()
         {
         case 97:
         case 49:
-            PrintAnalysis();
+            TotalAnalysis();
 
             break;
         case 98:
@@ -720,6 +758,7 @@ void Analyst::PrintAnalyst()
     }
 
 }
+
 
 
 void Analyst::CreatXls()
