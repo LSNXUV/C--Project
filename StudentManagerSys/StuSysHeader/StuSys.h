@@ -11,7 +11,7 @@ StuSys::StuSys(/* args */)
 
 void StuSys::welcome(int delay)
 {
-	
+
 	system("cls");
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
@@ -41,8 +41,11 @@ void StuSys::welcome(int delay)
 
 void StuSys::menu()
 {
+
+	SetConsoleTitleA("学生信息管理和分析系统");
+    system("mode con cols=96");
+
     welcome(20);
-    
 	int choice;
 	Manager StuM;
 	Analyst StuA;
@@ -101,7 +104,9 @@ void StuSys::menu()
 
 void StuSys::goodbye()
 {
-	printf("					欢迎下次使用~\n");
+	SetTextGreen();
+	printf("\n					   欢迎下次使用~\n");
+	SetTextWhite();
     Sleep(3000);
 }
 

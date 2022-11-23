@@ -35,8 +35,8 @@ public:
 
     void AtWelcome(int delay);
     void PrintAnalyst();
-    void IntervalAnalyst();
-    void IntervalAnalysis();
+    void IntervalAnalyst(int delay);
+    void IntervalAnalysis(int delay);
     void TotalAnalyst();
     void TotalAnalysis();
 
@@ -159,6 +159,13 @@ void Analyst::menu()
 
 bool Analyst::readFile()
 {
+    ifstream f("Students.txt");
+    if(!f.good())
+    {
+        FILE *fpw = fopen("Students.txt", "w");
+        fclose(fpw); //关闭文件指针
+        return true;
+    }
     FILE *fpr = fopen("Students.txt", "r");
 	Student st;
 	// Student *s;
@@ -490,11 +497,7 @@ void Analyst::PrintStu()
     {
 
         PtWelcome(20);
-        if(count == 0)
-        {
-            EmptyRemind();
-            break;
-        }
+        
         while(true)
         {
             choice = getch();
@@ -600,10 +603,10 @@ void Analyst::TotalAnalyst()
     }
     avr = sum/count;
     passRate = 100 * passRens / count ;
-    cout<<"\n                ";
+    cout<<"\n                   ";
     printf("|数学 \t|%d\t|%d\t|%d\t|%d/%d\t\t|%d %%\t|",max,min,avr,passRens,count,passRate);Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
 
 
     SortByEn();
@@ -620,10 +623,10 @@ void Analyst::TotalAnalyst()
     }
     avr = sum/count;
     passRate = 100 * passRens / count ;
-    cout<<"\n                ";
+    cout<<"\n                   ";
     printf("|英语 \t|%d\t|%d\t|%d\t|%d/%d\t\t|%d %%\t|",max,min,avr,passRens,count,passRate);Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
 
     SortByEt();
     head = Head->next;
@@ -639,10 +642,10 @@ void Analyst::TotalAnalyst()
     }
     avr = sum/count;
     passRate = 100 * passRens / count ;
-    cout<<"\n                ";
+    cout<<"\n                   ";
     printf("|体育 \t|%d\t|%d\t|%d\t|%d/%d\t\t|%d %%\t|",max,min,avr,passRens,count,passRate);Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
 
     SortByPc();
     head = Head->next;
@@ -658,10 +661,10 @@ void Analyst::TotalAnalyst()
     }
     avr = sum/count;
     passRate = 100 * passRens / count ;
-    cout<<"\n                ";
+    cout<<"\n                   ";
     printf("|计算机\t|%d\t|%d\t|%d\t|%d/%d\t\t|%d %%\t|",max,min,avr,passRens,count,passRate);Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
     
     SortBySum();
     head = Head->next;
@@ -677,42 +680,134 @@ void Analyst::TotalAnalyst()
     }
     avr = sum/count;
     passRate = 100 * passRens / count ;
-    cout<<"\n                ";
+    cout<<"\n                   ";
     printf("|总分 \t|%d\t|%d\t|%d\t|%d/%d\t\t|%d %%\t|",max,min,avr,passRens,count,passRate);Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
 }
 
 void Analyst::TotalAnalysis()
 {
-    if(count == 0)
-    {
-        EmptyRemind();
-        return;
-    }
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
-    cout<<"\n                ";
+    
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
     printf("|分析项\t|最高分\t|最低分\t|平均分\t|及格数/总人数\t|及格率\t|");Sleep(20);
-    cout<<"\n                ";
-    printf(" ──────────────────────────────────────────────────────");Sleep(20);
+    cout<<"\n                   ";
+    printf(" ───────────────────────────────────────────────────────────");Sleep(20);
 
 
     TotalAnalyst();
 
-
-    printf("                                                       按任意键退出");
+    SetTextGreen();
+    printf("                                                            按任意键退出");
+    SetTextWhite();
     getch();
 }
 
-void Analyst::IntervalAnalyst()
+void Analyst::IntervalAnalyst(int delay)
 {
+    Student *S;
+    int Rens1,Rens2,Rens3,Rens4,Rens5;
 
+    
+    Rens1=0,Rens2=0,Rens3=0,Rens4=0,Rens5=0;
+    for(S = Head->next;S;S = S->next)
+    {
+        if(S->ma >= 90 ) {Rens1++;continue;}
+        if(S->ma >= 80 ) {Rens2++;continue;}
+        if(S->ma >= 70 ) {Rens3++;continue;}
+        if(S->ma >= 60 ) {Rens4++;continue;}
+        Rens5++;continue;
+    }
+    cout<<"\n                     ";
+    printf("|数学\t|%d\t|%d\t|%d\t|%d\t|%d\t|",Rens1,Rens2,Rens3,Rens4,Rens5);Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+
+    Rens1=0,Rens2=0,Rens3=0,Rens4=0,Rens5=0;
+    for(S = Head->next;S;S = S->next)
+    {
+        if(S->en >= 90 ) {Rens1++;continue;}
+        if(S->en >= 80 ) {Rens2++;continue;}
+        if(S->en >= 70 ) {Rens3++;continue;}
+        if(S->en >= 60 ) {Rens4++;continue;}
+        Rens5++;continue;
+    }
+    cout<<"\n                     ";
+    printf("|英语\t|%d\t|%d\t|%d\t|%d\t|%d\t|",Rens1,Rens2,Rens3,Rens4,Rens5);Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+
+    Rens1=0,Rens2=0,Rens3=0,Rens4=0,Rens5=0;
+    for(S = Head->next;S;S = S->next)
+    {
+        if(S->et >= 90 ) {Rens1++;continue;}
+        if(S->et >= 80 ) {Rens2++;continue;}
+        if(S->et >= 70 ) {Rens3++;continue;}
+        if(S->et >= 60 ) {Rens4++;continue;}
+        Rens5++;continue;
+    }
+    cout<<"\n                     ";
+    printf("|体育\t|%d\t|%d\t|%d\t|%d\t|%d\t|",Rens1,Rens2,Rens3,Rens4,Rens5);Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+    Rens1=0,Rens2=0,Rens3=0,Rens4=0,Rens5=0;
+    for(S = Head->next;S;S = S->next)
+    {
+        if(S->pc >= 90 ) {Rens1++;continue;}
+        if(S->pc >= 80 ) {Rens2++;continue;}
+        if(S->pc >= 70 ) {Rens3++;continue;}
+        if(S->pc >= 60 ) {Rens4++;continue;}
+        Rens5++;continue;
+    }
+    cout<<"\n                     ";
+    printf("|计算机\t|%d\t|%d\t|%d\t|%d\t|%d\t|",Rens1,Rens2,Rens3,Rens4,Rens5);Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+
+    cout<<"\n\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+    cout<<"\n                     ";
+    printf("|总分\t| >=360\t| >=320\t| >=280\t| >=240\t| <240\t|");Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+    Rens1=0,Rens2=0,Rens3=0,Rens4=0,Rens5=0;
+    for(S = Head->next;S;S = S->next)
+    {
+        if(S->sum >= 360 ) {Rens1++;}
+        if(S->sum >= 320 ) {Rens2++;}
+        if(S->sum >= 280 ) {Rens3++;}
+        if(S->sum >= 240 ) {Rens4++;}
+        if(S->sum < 240 ) {Rens5++;}
+        
+    }
+    cout<<"\n                     ";
+    printf("|计算机\t|%d\t|%d\t|%d\t|%d\t|%d\t|",Rens1,Rens2,Rens3,Rens4,Rens5);Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
 }
 
-void Analyst::IntervalAnalysis()
+void Analyst::IntervalAnalysis(int delay)
 {
 
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+    cout<<"\n                     ";
+    printf("|分析项\t|90-100\t|80-90\t|70-80\t|60-70\t|60以下\t|");Sleep(delay);
+    cout<<"\n                     ";
+    printf(" ─────────────────────────────────────────────────");Sleep(delay);
+
+    IntervalAnalyst(delay);
+    SetTextGreen();
+    printf("                                                                    按任意键退出");
+    SetTextWhite();
+    getch();
 }
 
 void Analyst::PrintAnalyst()
@@ -749,6 +844,7 @@ void Analyst::PrintAnalyst()
             break;
         case 98:
         case 50:
+            IntervalAnalysis(20);
             
             break;
         default:
@@ -758,7 +854,6 @@ void Analyst::PrintAnalyst()
     }
 
 }
-
 
 
 void Analyst::CreatXls()
