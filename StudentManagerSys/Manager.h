@@ -78,38 +78,41 @@ Manager::Manager(/* args */)
 
 bool Manager::readFile()
 {
-    if(!Head->next) 
+    ifstream f("Students.txt");
+    if(!f.good())
     {
         FILE *fpw = fopen("Students.txt", "w");
         fclose(fpw); //关闭文件指针
+        return true;
     }
     FILE *fpr = fopen("Students.txt", "r");
-	Student st;
-	// Student *s;
+    Student st;
+    // Student *s;
 
-	Student *t = Head;
+    Student *t = Head;
 
-	if (fpr == NULL)
-	{
-		return false;
-	}
-	else
-	{
+    if (fpr == NULL)
+    {
+        return false;
+    }
+    else
+    {
 
-		while (fscanf(fpr, "%d %s %s %d %d %d %d %d %d", 
+        while (fscanf(fpr, "%d %s %s %d %d %d %d %d %d", 
         &st.id, st.name, st.sex, &st.ma, &st.en, &st.et, &st.pc, &st.avr, &st.sum) != EOF)
-		{
+        {
             Student *s = new Student;
             *s = st;
-			t->next = s;
-			t = s;
-			t->next = NULL;
+            t->next = s;
+            t = s;
+            t->next = NULL;
             End = t;
             count++;
-		}
-	}
-	fclose(fpr); //关闭文件指针
-	return true;
+        }
+    }
+    fclose(fpr); //关闭文件指针
+    return true;
+    
 }
 
 bool Manager::saveFile()
@@ -457,7 +460,7 @@ void Manager::PrintAddStu()
             {
                 AddStu(&S); 
                 SetTextGreen();
-                cout<<"\n\n                                   添加成功!";
+                cout<<"\n\n                                      添加成功!";
                 SetTextWhite();
                 Sleep(2000);
                break;
