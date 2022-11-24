@@ -1,39 +1,46 @@
 
 #include "Student.h"
 
-// #include "StuSys.h"
 
 class StuSys
 {
+    private:
 
-private:
-    
-public:
+    protected:
+        Student *Head,*End;
+        int count;
+    public:
 
-    virtual void welcome(int delay);
-	virtual void menu();
+        bool readFile();
+        bool saveFile();
 
-	void goodbye();
-    StuSys(/* args */);
-    ~StuSys();
+        virtual void welcome(int delay);
+        virtual void menu();
+
+        void Cprintf(string str);
+        void Mprintf(string str);
+        void SetTextWhite();
+        void SetTextGreen();
+        void SetTextRed();
+        void ShowCursor(bool visible);
+        bool IsRegexInput(string str);
+        void gotoxy(int x,int y);
+
+        void EmptyRemind();
+
+        void goodbye();
+        StuSys(/* args */);
+        ~StuSys();
+
 };
 
 class Manager:public StuSys
 {
     private:
-        Student *Head,*End;
 
     public:
 
-        int count;
         int countRens();
-
-        // void copy(Student *s1,Student *s);
-
-        bool readFile();
-        bool saveFile();
-
-        void EmptyRemind();
 
         void welcome(int delay);
         void menu();
@@ -69,86 +76,7 @@ class Manager:public StuSys
 
 Manager::Manager(/* args */)
 {
-    Head =  new Student;
-    Head->next = NULL;
-    End = Head;
-    count = 0;
     
-}
-
-bool Manager::readFile()
-{
-    ifstream f("Students.txt");
-    if(!f.good())
-    {
-        FILE *fpw = fopen("Students.txt", "w");
-        fclose(fpw); //关闭文件指针
-        return true;
-    }
-    FILE *fpr = fopen("Students.txt", "r");
-    Student st;
-    // Student *s;
-
-    Student *t = Head;
-
-    if (fpr == NULL)
-    {
-        return false;
-    }
-    else
-    {
-
-        while (fscanf(fpr, "%d %s %s %d %d %d %d %d %d", 
-        &st.id, st.name, st.sex, &st.ma, &st.en, &st.et, &st.pc, &st.avr, &st.sum) != EOF)
-        {
-            Student *s = new Student;
-            *s = st;
-            t->next = s;
-            t = s;
-            t->next = NULL;
-            End = t;
-            count++;
-        }
-    }
-    fclose(fpr); //关闭文件指针
-    return true;
-    
-}
-
-bool Manager::saveFile()
-{
-    //排序
-
-    FILE *fpw = fopen("Students.txt", "w");
-
-	if (!fpw)
-		return false;
-
-	Student *p = Head->next;
-    if(!p)
-        return true;
-	while (p)
-	{
-		fprintf(fpw, "%d %s %s %d %d %d %d %d %d\n",
-        p->id, p->name, p->sex, p->ma, p->en, p->et, p->pc, p->avr, p->sum);
-		p = p->next;
-	}
-
-	fclose(fpw); //关闭文件指针
-	return true;
-}
-
-void Manager::EmptyRemind()
-{
-    cout<<"\n";
-    SetTextGreen();
-    for(int i = 3;i>=1;i--)
-    {
-        printf("                      当前无学生信息，请先添加学生信息  %d 秒后自动退出",i);
-        Sleep(1000);
-        cout<<"\r";
-    }
-    SetTextWhite();
 }
 
 int Manager::countRens()
@@ -311,20 +239,23 @@ void Manager::PrintAddStu()
         //添加学生信息
         ShowCursor(true);
 
-        printf("请输入学号:");
+        printf("\n");
+        Mprintf("请输入学号:");
+        
         while (1)
         {
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                cout << "学号只能是数字,请重新输入:";
+
+                Mprintf("学号只能是数字,请重新输入:");
                 cin >> str;
             }
             
             S.id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
             if (S.id < 20220000 || S.id > 20229999)
             {
-                printf("学号格式错误,请重新输入:");
+                Mprintf("学号格式错误,请重新输入:");
             }
             else
             {
@@ -334,7 +265,8 @@ void Manager::PrintAddStu()
                 }
                 if(s)
                 {
-                    printf("学号已存在!请重新输入:");
+                    Mprintf("学号已存在!请重新输入:");
+                    s = Head->next;
                 }else{
                     break;
                 }
@@ -343,10 +275,12 @@ void Manager::PrintAddStu()
             
         }
 
-        printf("请输入姓名:");
+        printf("\n");
+        Mprintf("请输入姓名:");
         scanf("%s", S.name);
 
-        printf("请输入性别:");
+        printf("\n");
+        Mprintf("请输入性别:");
         while (1)
         {
             scanf("%s", S.sex);
@@ -356,25 +290,26 @@ void Manager::PrintAddStu()
             }
             else
             {
-                printf("性别错误,请重新输入:");
+                Mprintf("性别错误,请重新输入:");
             }
         };
 
-        printf("请输入数学成绩:");
+        printf("\n");
+        Mprintf("请输入数学成绩:");
         while (1)
         {
 
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                cout << "请输入数字,重新输入数学:\n";
+                Mprintf("请输入数字,重新输入数学:\n");
                 cin >> str;
             }
             S.ma = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if ((S.ma < 0) || (S.ma > 100))
             {
-                printf("数学满分100,请重新输入:");
+                Mprintf("数学满分100,请重新输入:");
             }
             else
             {
@@ -382,20 +317,21 @@ void Manager::PrintAddStu()
             }
         }
 
-        printf("请输入英语成绩:");
+        printf("\n");
+        Mprintf("请输入英语成绩:");
         while (1)
         {
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                cout << "请输入数字,重新输入英语:\n";
+                Mprintf("请输入数字,重新输入英语:\n");
                 cin >> str;
             }
             S.en = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.en < 0 || S.en > 100)
             {
-                printf("英语满分100,请重新输入:");
+                Mprintf("英语满分100,请重新输入:");
             }
             else
             {
@@ -403,20 +339,21 @@ void Manager::PrintAddStu()
             }
         }
 
-        printf("请输入体育成绩:");
+        printf("\n");
+        Mprintf("请输入体育成绩:");
         while (1)
         {
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                cout << "请输入数字,重新输入体育:\n";
+                Mprintf("请输入数字,重新输入体育:");
                 cin >> str;
             }
             S.et = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.et < 0 || S.et > 100)
             {
-                printf("体育满分100,请重新输入:");
+                Mprintf("体育满分100,请重新输入:");
             }
             else
             {
@@ -424,21 +361,22 @@ void Manager::PrintAddStu()
             }
         }
 
-        printf("请输入计算机成绩:");
+        printf("\n");
+        Mprintf("请输入计算机成绩:");
         while (1)
         {
 
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                cout << "请输入数字,重新输入计算机:\n";
+                Mprintf("请输入数字,重新输入计算机:\n");
                 cin >> str;
             }
             S.pc = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.pc < 0 || S.pc > 100)
             {
-                printf("计算机满分100,请重新输入:");
+                Mprintf("计算机满分100,请重新输入:");
             }
             else
             {
@@ -452,7 +390,8 @@ void Manager::PrintAddStu()
 
         AddWelcome(0);
         PrintSingleStu(S);
-        printf("\n                                   确认信息?  Y/N");
+        printf("\n");
+        Cprintf("确认信息?  Y/N");
         while(true)
         { 
             choice = getch();
@@ -460,7 +399,8 @@ void Manager::PrintAddStu()
             {
                 AddStu(&S); 
                 SetTextGreen();
-                cout<<"\n\n                                      添加成功!";
+                printf("\n\n");
+                Cprintf("添加成功!");
                 SetTextWhite();
                 Sleep(2000);
                break;
@@ -561,19 +501,19 @@ void Manager::PrintDeleteStu()
         case 105:
 
             ShowCursor(true);
-            cout<<"请输入学号:";
+            Mprintf("请输入学号:");
             while (1)
             {
                 cin >> str;
                 while (!IsRegexInput(str)) // 判断输入的内容是否为整形
                 {
-                    cout << "学号有误,请重新输入:";
+                    Mprintf("学号有误,请重新输入:");
                     cin >> str;
                 }
                 id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
                 if (id < 20220000 || id > 20229999)
                 {
-                    printf("学号有误,请重新输入:");
+                    Mprintf("学号有误,请重新输入:");
                 }
                 else
                 {
@@ -586,9 +526,15 @@ void Manager::PrintDeleteStu()
             {
                 S = *s->next;
                 PrintSingleStu(S);
-                printf("\n                                   确认删除?  Y(是)/N(否)");
+                printf("\n\n");
+                SetTextRed();
+                Cprintf("确认删除?  Y(是)/N(否)");
+                SetTextWhite();
             }else{
-                printf("\n                                          学生不存在！");
+                printf("\n\n");
+                SetTextGreen();
+                Cprintf("学生不存在！");
+                SetTextWhite();
                 Sleep(2000);
                 break;
             }
@@ -598,7 +544,7 @@ void Manager::PrintDeleteStu()
                 if(choice == 89 || choice == 121) 
                 {
                     DeleteStu(s);
-                    cout<<"\n                                        删除成功!";
+                    Cprintf("\n删除成功!");
                     Sleep(2000);
                     break;
                 }
@@ -879,7 +825,8 @@ void Manager::PrintSearchStu()
         case 105:
 
             ShowCursor(true);
-            cout<<"请输入学号:";
+            Mprintf("请输入学号:");
+            
             while (1)
             {
                 cin >> str;
@@ -905,7 +852,7 @@ void Manager::PrintSearchStu()
             {
                 S = *s->next;
                 PrintSingleStu(S);
-                printf("\n                                      按任意键继续");
+                Cprintf("\n\n按任意键继续");
             }else{
                 printf("\n                                          学生不存在！");
                 Sleep(2000);

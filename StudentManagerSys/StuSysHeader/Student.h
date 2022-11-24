@@ -32,7 +32,7 @@ class Student
 
 Student::Student()
 {
-    
+    next = NULL;
 }
 
 Student::~Student()

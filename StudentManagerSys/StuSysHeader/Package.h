@@ -1,14 +1,16 @@
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <regex>
 #include <cstring>
 #include <conio.h>
 #include <windows.h>
 
+
 using namespace std;
 
-#ifndef _FUN_H
+/* #ifndef _FUN_H
 #define _FUN_H
 
 // 使用正则表达式进行匹配，判断全局输入
@@ -34,12 +36,6 @@ void ShowCursor(bool visible) {
  	//SetConsoleCursorInfo设定控制台窗口的光标大小和是否可见
 }
 
-template <typename T>
-
-inline T const& Max (T const& a, T const& b) 
-{ 
-    return a < b ? b:a; 
-}
 
 void SetTextRed()
 {
@@ -54,11 +50,28 @@ void SetTextWhite()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
+
+
+void gotoxy(int x,int y){  
+    COORD pos;  
+    pos.X=x;  
+    pos.Y=y;  
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos); 
+}
+
+void Mprintf(string str)
+{
+	cout<<setw(48)<<str;
+}
+void Cprintf(string str)
+{
+	cout<<setw(48+str.length()/2)<<str;
+}
 void SetBgWhite()
 {
 	
 }
-#endif
+#endif */
 
 
 

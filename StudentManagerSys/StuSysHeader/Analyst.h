@@ -9,15 +9,9 @@ class Analyst:public StuSys
 {
 
 private:
-    int count;
-    Student *Head,*End;
-
+    
 public:
 
-
-    bool readFile();
-    bool saveFile();
-    void EmptyRemind();
     void welcome(int delay);
     void menu();
 
@@ -54,10 +48,7 @@ public:
 
 Analyst::Analyst(/* args */)
 {
-    Head =  new Student;
-    Head->next = new Student;
-    End = Head->next;
-    count = 0;
+
 }
 
 void Analyst::welcome(int delay)
@@ -157,76 +148,6 @@ void Analyst::menu()
     }
 }
 
-bool Analyst::readFile()
-{
-    ifstream f("Students.txt");
-    if(!f.good())
-    {
-        FILE *fpw = fopen("Students.txt", "w");
-        fclose(fpw); //关闭文件指针
-        return true;
-    }
-    FILE *fpr = fopen("Students.txt", "r");
-	Student st;
-	// Student *s;
-    count = 0;
-	Student *t = Head;
-
-	if (fpr == NULL)
-	{
-		return false;
-	}
-	else
-	{
-
-		while (fscanf(fpr, "%d %s %s %d %d %d %d %d %d", &st.id, st.name, st.sex, &st.ma, &st.en, &st.et, &st.pc, &st.avr, &st.sum) != EOF)
-		{
-            Student *s = new Student;
-            *s = st;
-			t->next = s;
-			t = s;
-			t->next = NULL;
-            End = t;
-            count++;
-		}
-	}
-	fclose(fpr); 
-	return true;
-}
-
-bool Analyst::saveFile()
-{
-
-    //初始化文件指针
-    FILE *fpw = fopen("Students.txt", "w");
-    count = 0;
-	if (!fpw)
-		return false;
-	Student *p = Head->next;
-
-	while (p)
-	{
-		fprintf(fpw, "%d %s %s %d %d %d %d %d %d\n", p->id, p->name, p->sex, p->ma, p->en, p->et, p->pc, p->avr, p->sum);
-        count++;
-		p = p->next;
-	}
-
-	fclose(fpw); //关闭文件指针
-	return true;
-}
-
-void Analyst::EmptyRemind()
-{
-    cout<<"\n";
-    SetTextGreen();
-    for(int i = 3;i>=1;i--)
-    {
-        printf("                      当前无学生信息，请先添加学生信息  %d 秒后自动退出",i);
-        Sleep(1000);
-        cout<<"\r";
-    }
-    SetTextWhite();
-}
 
 void Analyst::SortById()
 {
@@ -237,7 +158,7 @@ void Analyst::SortById()
 		//初始化三个指针 ; 判断是否到达结束位置 ; 三个指针集体后移
 		for (pre = Head, cur = pre->next, next = cur->next; next != end; pre = pre->next, cur = cur->next, next = next->next)
 		{
-			if (/* !(next->age) && */ cur->id > next->id) //从小到大
+			if (cur->id > next->id) //从小到大
 			{
 				pre->next = next;
 				cur->next = next->next;
