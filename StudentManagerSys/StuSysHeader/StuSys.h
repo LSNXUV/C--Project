@@ -239,7 +239,17 @@ void StuSys::goodbye()
 	SetTextGreen();
 	printf("\n					   欢迎下次使用~\n");
 	SetTextWhite();
+
     Sleep(3000);
+}
+
+void StuSys::Free(Student *Head)
+{
+	if(Head)
+	{
+		Free(Head->next);
+		free(Head);
+	}
 }
 
 StuSys::~StuSys()

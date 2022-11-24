@@ -405,7 +405,7 @@ void Analyst::PrintStuInfo(bool IsRank,bool IsSingle)
         }
     }
     
-    printf("                                                       按任意键退出");
+    Cprintf("按任意键退出");
     getch();
 }
 
@@ -621,7 +621,8 @@ void Analyst::TotalAnalysis()
     TotalAnalyst();
 
     SetTextGreen();
-    printf("                                                            按任意键退出");
+    printf("\n\n");
+    Cprintf("按任意键退出");
     SetTextWhite();
     getch();
 }
@@ -726,7 +727,8 @@ void Analyst::IntervalAnalysis(int delay)
 
     IntervalAnalyst(delay);
     SetTextGreen();
-    printf("                                                                    按任意键退出");
+    printf("\n\n");
+    Cprintf("按任意键退出");
     SetTextWhite();
     getch();
 }
