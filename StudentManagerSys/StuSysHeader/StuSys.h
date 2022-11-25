@@ -26,7 +26,7 @@ bool StuSys::readFile()
     // Student *s;
 
     Student *t = Head;
-
+	count = 0;
     if (fpr == NULL)
     {
         return false;

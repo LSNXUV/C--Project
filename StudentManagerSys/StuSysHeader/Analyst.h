@@ -1,9 +1,6 @@
 
 #include "Student.h"
 
-// #include "StuSys.h"
-
-
 
 class Analyst:public StuSys
 {
@@ -782,7 +779,7 @@ void Analyst::PrintAnalyst()
 void Analyst::CreatXls()
 {
     ofstream oFile;
-	oFile.open("Xls/Students.csv",ios::out|ios::trunc);
+	oFile.open("Excel/Students.csv",ios::out|ios::trunc);
 	oFile<<"学号"<<","<<"姓名"<<","<<"性别"<<","<<"数学"<<","<<"英语"<<","<<"体育"<<","<<"计算机"<<","<<"平均分"<<","<<"总分"<<endl;
     SortBySum();
     Student *S = Head->next;
@@ -792,7 +789,7 @@ void Analyst::CreatXls()
         S = S->next;
     }
 	oFile.close();
-    system("start Xls/Students.csv");
+    system("start Excel/Students.csv");
 }
 
 void Analyst::CtWelcome(int delay)

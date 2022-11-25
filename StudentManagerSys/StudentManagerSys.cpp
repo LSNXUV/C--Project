@@ -3,8 +3,6 @@
 #include "StuSysHeader/StuSys.h"
 
 
-
-
 int main(){
    
     StuSys Sys;

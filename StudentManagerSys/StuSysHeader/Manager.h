@@ -549,7 +549,9 @@ void Manager::PrintDeleteStu()
                 {
                     DeleteStu(s);
                     printf("\n\n");
+                    SetTextGreen();
                     Cprintf("删除成功!");
+                    SetTextWhite();
                     Sleep(2000);
                     break;
                 }
@@ -593,7 +595,9 @@ void Manager::PrintDeleteStu()
                 {
                     DeleteStu(s);
                     printf("\n\n");
+                    SetTextGreen();
                     Cprintf("删除成功!");
+                    SetTextWhite();
                     Sleep(2000);
                     break;
                 }
@@ -977,7 +981,8 @@ void Manager::UpdateStu(Student *stu)
 {
     string str;
     int UpdateChoice;
-    Student S,*s;
+    Student S,*s,*st = Head->next;
+    int id;
     if(stu->next)
     {
         UpWelcome(20);
@@ -1017,18 +1022,30 @@ void Manager::UpdateStu(Student *stu)
                     Mprintf("学号只能是数字,请重新输入:");
                     cin >> str;
                 }
-                s->id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
-                if (s->id < 20220000 || s->id > 20229999)
+            
+                id = atoi(str.c_str());//输入没有问题，进行字符串转换为整形
+                if (id < 20220000 || id > 20229999)
                 {
                     Mprintf("学号不合法,请重新输入:");
                 }
                 else
                 {
-                    break;
+                    if(id == s->id) break;
+                    while(st && st->id != id)
+                    {
+                        st = st->next;
+                    }
+                    if(st)
+                    {
+                        Mprintf("学号已存在!请重新输入:");
+                        st = Head->next;
+                    }else{
+                        break;
+                    }
                 }
             }
             printf("\n");
-            Cprintf("修改成功！");ShowCursor(false);
+            ShowCursor(false);Cprintf("修改成功！");
             Sleep(2000);
             UpWelcome(10);
 
@@ -1036,8 +1053,7 @@ void Manager::UpdateStu(Student *stu)
             break;
         case 50:
         case 98:
-            cout<<endl;
-            Mprintf("请输入姓名:");
+            printf("\n\n");Mprintf("请输入姓名:");
             scanf("%s", s->name);
             printf("\n");
             Cprintf("修改成功！");ShowCursor(false);
@@ -1049,7 +1065,7 @@ void Manager::UpdateStu(Student *stu)
         case 51:
         case 99:
             cout<<endl;
-            Mprintf("请输入性别:");
+            printf("\n\n");Mprintf("请输入性别:");
             while (1)
             {
                 scanf("%s", s->sex);
@@ -1072,7 +1088,7 @@ void Manager::UpdateStu(Student *stu)
         case 52:
         case 100:
             cout<<endl;
-            Mprintf("请输入数学成绩:");
+            printf("\n\n");Mprintf("请输入数学成绩:");
             while (1)
             {
 
@@ -1105,7 +1121,7 @@ void Manager::UpdateStu(Student *stu)
         case 53:
         case 101:
             cout<<endl;
-            Mprintf("请输入英语成绩:");
+            printf("\n\n");Mprintf("请输入英语成绩:");
             while (1)
             {
                 cin >> str;
@@ -1137,7 +1153,7 @@ void Manager::UpdateStu(Student *stu)
         case 54:
         case 102:
             cout<<endl;
-            Mprintf("请输入体育成绩:");
+            printf("\n\n");Mprintf("请输入体育成绩:");
             while (1)
             {
                 cin >> str;
@@ -1169,7 +1185,7 @@ void Manager::UpdateStu(Student *stu)
         case 55:
         case 103:
             cout<<endl;
-            Mprintf("请输入计算机成绩:");
+            printf("\n\n");Mprintf("请输入计算机成绩:");
             while (1)
             {
 
@@ -1270,7 +1286,7 @@ void Manager::PrintUpdateStu()
         case 78:
         case 110:
             ShowCursor(true);
-            Mprintf("请输入姓名:");
+            printf("\n\n");Mprintf("请输入姓名:");
             scanf("%s", name);
 
             stu = SearchByName(name);
@@ -1291,5 +1307,6 @@ void Manager::PrintUpdateStu()
 
 Manager::~Manager()
 {
+
 }
 

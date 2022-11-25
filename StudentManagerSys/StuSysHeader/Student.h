@@ -29,7 +29,6 @@ class Student
 };
 
 
-
 Student::Student()
 {
     next = NULL;
