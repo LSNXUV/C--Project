@@ -25,7 +25,8 @@ class StuSys
         void ShowCursor(bool visible);
         bool IsRegexInput(string str);
         void gotoxy(int x,int y);
-
+        void SizeGoAway();
+        void DeleteGoAway();
         void EmptyRemind();
 
         void goodbye();
@@ -75,6 +76,7 @@ class Manager:public StuSys
         ~Manager();
 };
 
+
 Manager::Manager(/* args */)
 {
     
@@ -99,7 +101,7 @@ int Manager::countRens()
 
 void Manager::welcome(int delay)
 {
-
+    readFile();
     system("cls");
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
@@ -120,20 +122,14 @@ void Manager::welcome(int delay)
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆          0.退出管理系统        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化成功            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
     
-    if(readFile())
-    {
-        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化成功            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
-    }
-    else{
-        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化失败            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
-    }
 
 }
 
 void Manager::menu()
 {
-
+    
     
 
     int choice;
@@ -391,7 +387,8 @@ void Manager::PrintAddStu()
 
         AddWelcome(0);
         PrintSingleStu(S);
-        printf("\n");
+        printf("\n\n");
+        SetTextGreen();
         Cprintf("确认信息?  Y/N");
         while(true)
         { 
@@ -399,7 +396,6 @@ void Manager::PrintAddStu()
             if(choice == 89 || choice == 121) 
             {
                 AddStu(&S); 
-                SetTextGreen();
                 printf("\n\n");
                 Cprintf("添加成功!");
                 SetTextWhite();

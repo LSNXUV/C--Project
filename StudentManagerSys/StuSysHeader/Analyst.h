@@ -50,7 +50,7 @@ Analyst::Analyst(/* args */)
 
 void Analyst::welcome(int delay)
 {
-
+    readFile();
     system("cls");
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
@@ -73,18 +73,13 @@ void Analyst::welcome(int delay)
     printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆         E.生成EXCEL文件        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
     printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
     printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆          0.退出管理系统        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆          0.退出分析系统        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
     printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
 
-    if(readFile())
-    {
-        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化成功            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
-    }
-    else{
-        printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓文件初始化失败！〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
-    }
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓            文件初始化成功            〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+    
     // cout<<Head->next->name<<" "<<End->name;
 }
 
@@ -401,8 +396,10 @@ void Analyst::PrintStuInfo(bool IsRank,bool IsSingle)
             s = s->next;
         }
     }
-    
+    printf("\n");
+    SetTextGreen();
     Cprintf("按任意键退出");
+    SetTextWhite();
     getch();
 }
 
@@ -779,7 +776,10 @@ void Analyst::PrintAnalyst()
 void Analyst::CreatXls()
 {
     ofstream oFile;
+    system("md Excel");
+
 	oFile.open("Excel/Students.csv",ios::out|ios::trunc);
+
 	oFile<<"学号"<<","<<"姓名"<<","<<"性别"<<","<<"数学"<<","<<"英语"<<","<<"体育"<<","<<"计算机"<<","<<"平均分"<<","<<"总分"<<endl;
     SortBySum();
     Student *S = Head->next;
@@ -837,6 +837,8 @@ void Analyst::CreatHtml(bool IsRank,bool IsSingle,string FileName)
 {
     FILE *f;
     int i = 1;
+
+
     f=fopen(("HTML/"+FileName).c_str(),"w+");
 
     fprintf(f,"<html lang=\"en\">\n");
@@ -927,6 +929,7 @@ void Analyst::CreatHtml(bool IsRank,bool IsSingle,string FileName)
 void Analyst::CreatAnalystHtml()
 {
     FILE *f;
+
     f = fopen("HTML/Analysis.html","w+");
 
     fprintf(f,"<html lang=\"en\">\n");
@@ -1105,6 +1108,7 @@ void Analyst::PrintCreatHtml()
 {
 
     int choice;
+    system("md HTML");
 
     while(true)
     {

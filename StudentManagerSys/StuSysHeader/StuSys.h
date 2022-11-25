@@ -14,22 +14,25 @@ StuSys::StuSys(/* args */)
 
 bool StuSys::readFile()
 {
-    ifstream f("Students.txt");
+	
+    /* ifstream f("Students/Students.txt");
     if(!f.good())
     {
-        FILE *fpw = fopen("Students.txt", "w");
+        FILE *fpw = fopen("Students/Students.txt", "w");
         fclose(fpw); //关闭文件指针
         return true;
-    }
-    FILE *fpr = fopen("Students.txt", "r");
+    } */
+	system("md Students");
+    FILE *fpr = fopen("Students/Students.txt", "r");
     Student st;
-    // Student *s;
-
     Student *t = Head;
 	count = 0;
-    if (fpr == NULL)
+	
+    if (!fpr)
     {
-        return false;
+        FILE *fpw = fopen("Students/Students.txt", "w");
+        fclose(fpw); //关闭文件指针
+        return true;
     }
     else
     {
@@ -53,9 +56,10 @@ bool StuSys::readFile()
 
 bool StuSys::saveFile()
 {
-    //排序
 
-    FILE *fpw = fopen("Students.txt", "w");
+    //排序
+	system("md Students");
+    FILE *fpw = fopen("Students/Students.txt", "w");
 
 	if (!fpw)
 		return false;
@@ -106,35 +110,71 @@ void StuSys::welcome(int delay)
 
 void StuSys::menu()
 {
-
-	SetConsoleTitleA("学生信息管理和分析系统");
+	
+	SizeGoAway();
+    DeleteGoAway();
+	SetConsoleTitleA("                                                                                               学生信息管理和分析系统");
     system("mode con cols=96");
 
     welcome(20);
+
+	string username;
+	char ch;
+	
+	printf("\n\n");
+	Cprintf("请输入管理员账号密码\n");
+	while(true)
+	{
+		int i = 0;
+		char password[50];
+		string pw;
+
+		printf("\n");
+		Mprintf("username:");
+		cin>>username;
+
+		printf("\n");
+		Mprintf("password:");
+		while((ch=getch())!='\r')
+		{
+			if(ch!=8)//不是回撤就录入
+			{
+				password[i++]=ch;
+				putchar('*');//并且输出*号
+			}
+			else
+			{
+				if(i == 0) continue;
+				putchar('\b');//这里是删除一个，我们通过输出回撤符 /b，回撤一格，
+				putchar(' ');//再显示空格符把刚才的*给盖住，
+				putchar('\b');//然后再 回撤一格等待录入。
+				i--;
+			}
+		}
+
+		password[i]='\0';
+		pw = password;
+		if(username == "root" && pw == "admin777")
+		{
+			SetTextGreen();
+			printf("\n\n");
+			Cprintf("登录成功!\n");
+			SetTextWhite();
+			ShowCursor(false);
+			Sleep(1000);
+			break;
+		}
+
+		welcome(0);
+		printf("\n\n");
+		Cprintf("账号或密码错误!\n\n");
+		
+	}
+
+
 	int choice;
 	Manager StuM;
 	Analyst StuA;
-	string username = "root";
-	string password = "admin777";
-	string user,pw;
-	
-	/* cout<<"请输入管理员账号密码\n";
-	while(true)
-	{
-		cout<<"username:";
-		cin>>user;
-		cout<<"password:";
-		cin>>pw;
-		if(user == "root" && pw == "admin777")
-		{
-			cout<<"登录成功!\n";
-			break;
-		}
-		cout<<"账号或密码错误!\n";
-	} */
-
-	// printf("请键入功能\n");
-	
 	while(true)
 	{
 		//隐藏光标
@@ -232,6 +272,21 @@ void StuSys::Mprintf(string str)
 void StuSys::Cprintf(string str)
 {
 	cout<<setw(48+str.length()/2)<<str;
+}
+
+//取消最大化，最小化
+void StuSys::SizeGoAway() {
+	SetWindowLongPtrA(
+		GetConsoleWindow(),
+		GWL_STYLE,
+		GetWindowLongPtrA(GetConsoleWindow(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
+}
+
+//取消关闭  谨慎使用，坑人专用
+void StuSys::DeleteGoAway(){
+	DeleteMenu(GetSystemMenu(GetConsoleWindow(), FALSE),
+		SC_CLOSE, MF_DISABLED);
+	DrawMenuBar(GetConsoleWindow());
 }
 
 void StuSys::goodbye()
