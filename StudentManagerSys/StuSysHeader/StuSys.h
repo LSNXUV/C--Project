@@ -22,7 +22,7 @@ bool StuSys::readFile()
         fclose(fpw); //关闭文件指针
         return true;
     } */
-	system("md Students");
+	system("md Students 2>nul");
     FILE *fpr = fopen("Students/Students.txt", "r");
     Student st;
     Student *t = Head;
@@ -58,7 +58,7 @@ bool StuSys::saveFile()
 {
 
     //排序
-	system("md Students");
+	system("md Students 2>nul");
     FILE *fpw = fopen("Students/Students.txt", "w");
 
 	if (!fpw)
@@ -111,6 +111,7 @@ void StuSys::welcome(int delay)
 void StuSys::menu()
 {
 	
+	// system("taskkill /im StudentManagerSys.exe>nul 2>nul");
 	SizeGoAway();
     DeleteGoAway();
 	SetConsoleTitleA("                                                                                               学生信息管理和分析系统");

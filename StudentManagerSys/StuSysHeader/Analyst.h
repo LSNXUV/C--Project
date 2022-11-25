@@ -776,7 +776,7 @@ void Analyst::PrintAnalyst()
 void Analyst::CreatXls()
 {
     ofstream oFile;
-    system("md Excel");
+    system("md Excel 2>nul");
 
 	oFile.open("Excel/Students.csv",ios::out|ios::trunc);
 
@@ -789,7 +789,7 @@ void Analyst::CreatXls()
         S = S->next;
     }
 	oFile.close();
-    system("start Excel/Students.csv");
+    system("start Excel/Students.csv 2>nul");
 }
 
 void Analyst::CtWelcome(int delay)
@@ -922,7 +922,7 @@ void Analyst::CreatHtml(bool IsRank,bool IsSingle,string FileName)
     fprintf(f,"</body>\n");
     fclose(f);
     
-    system(("start HTML/"+FileName).c_str());
+    system(("start HTML/"+FileName+" 2>nul").c_str());
 }
 
 
@@ -1100,7 +1100,7 @@ void Analyst::CreatAnalystHtml()
     fprintf(f,"</body>\n");
     fclose(f);
     
-    system("start HTML/Analysis.html");
+    system("start HTML/Analysis.html 2>nul");
 
 }
 
@@ -1108,7 +1108,7 @@ void Analyst::PrintCreatHtml()
 {
 
     int choice;
-    system("md HTML");
+    system("md HTML 2>nul");
 
     while(true)
     {
