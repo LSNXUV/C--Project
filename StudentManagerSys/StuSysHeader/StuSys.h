@@ -105,7 +105,7 @@ void StuSys::menu()
 	
 	SizeGoAway();
     DeleteGoAway();
-	SetConsoleTitleA("                                                                                               学生信息管理和分析系统");
+	SetConsoleTitleA("                                                                                              学生信息管理和分析系统");
     system("mode con cols=96");
 
     welcome(20);
@@ -114,7 +114,10 @@ void StuSys::menu()
 	char ch;
 	
 	printf("\n\n");
+	SetTextGreen();
 	Cprintf("请输入管理员账号密码\n");
+	SetTextWhite();
+	
 	while(true)
 	{
 		int i = 0;
