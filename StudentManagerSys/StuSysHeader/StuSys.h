@@ -50,7 +50,6 @@ bool StuSys::readFile()
 bool StuSys::saveFile()
 {
 
-    //ÅÅÐò
 	system("md Students 2>nul");
     FILE *fpw = fopen("Students/Students.txt", "w");
 
