@@ -42,8 +42,6 @@ class Manager:public StuSys
 
     public:
 
-        int countRens();
-
         void welcome(int delay);
         void menu();
 
@@ -80,22 +78,6 @@ class Manager:public StuSys
 Manager::Manager(/* args */)
 {
     
-}
-
-int Manager::countRens()
-{
-    if (!Head)
-		return 0;
-	int n = 0;
-    cout<<Head->next<<endl;
-	Student *s = Head->next;
-    while(s)
-    {
-        cout<<s->name<<endl;
-        n++;
-        s = s->next;
-    }
-	return n;
 }
 
 
