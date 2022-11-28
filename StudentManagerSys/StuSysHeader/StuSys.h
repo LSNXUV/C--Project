@@ -102,10 +102,12 @@ void StuSys::welcome(int delay)
 
 void StuSys::menu()
 {
-	
+
+	char Title[96];
 	SizeGoAway();
     DeleteGoAway();
-	SetConsoleTitleA("                                                                                              学生信息管理和分析系统");
+	sprintf(Title,"% 115s","学生信息管理和分析系统");
+	SetConsoleTitleA(Title);
     system("mode con cols=96");
 
     welcome(20);
@@ -120,14 +122,15 @@ void StuSys::menu()
 	
 	while(true)
 	{
-		int i = 0;
-		char password[50];
-		string pw;
+		
 
 		printf("\n");
 		Mprintf("username:");
 		cin>>username;
-
+		
+		int i = 0;
+		char password[50];
+		string pw;
 		printf("\n");
 		Mprintf("password:");
 		while((ch=getch())!='\r')
@@ -174,7 +177,6 @@ void StuSys::menu()
 	{
 		//隐藏光标
 		ShowCursor(false);
-
 		welcome(0);
 
 		choice = getch();

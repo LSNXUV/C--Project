@@ -12,6 +12,13 @@ public:
     void welcome(int delay);
     void menu();
 
+    template <class T>
+    void Swap(T &x, T &y)
+    {
+        T tmp = x;
+        x = y;
+        y = tmp;
+    }
     void SortById();
     void SortBySum();
     void SortByMa();
@@ -157,9 +164,7 @@ void Analyst::SortById()
 				next->next = cur;
 
 				//此时next变前一项，cur变后一项  交换next cur
-				Student *temp = cur;
-				cur = next;
-				next = temp;
+				Swap(cur,next);
 			}
 		}
 		//一轮循环结束 最后一项已经排好 end提前一项 (冒泡原理)
@@ -236,9 +241,7 @@ void Analyst::SortByEn()
 				cur->next = next->next;
 				next->next = cur;
 
-				Student *temp = cur;
-				cur = next;
-				next = temp;
+				Swap(cur,next);
 			}
 		}
 		end = cur;
@@ -313,6 +316,7 @@ void Analyst::SortByName()
 		p = q;
 	}
 }
+
 
 void Analyst::PtWelcome(int delay)
 {

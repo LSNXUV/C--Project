@@ -29,6 +29,7 @@ class StuSys
         void DeleteGoAway();
         void EmptyRemind();
 
+
         void goodbye();
         void Free(Student *Head);
         StuSys(/* args */);
@@ -112,13 +113,11 @@ void Manager::welcome(int delay)
 void Manager::menu()
 {
     
-    
-
     int choice;
-    // printf("\n请键入功能\n");
+
     while (true)
     {
-        // ShowCursor(true);
+        
         welcome(20);
         while(true)
         {
@@ -155,7 +154,6 @@ void Manager::menu()
         default:
             break;
         }
-        
     }
 }
 
@@ -193,7 +191,7 @@ void Manager::AddWelcome(int delay)
 void Manager::PrintAddStu()
 {
 
-    Student S,*s = Head->next;
+    Student S,*s;
     int choice;
     string str;
 
@@ -238,6 +236,7 @@ void Manager::PrintAddStu()
             }
             else
             {
+                s = Head->next;
                 while(s && s->id != S.id)
                 {
                     s = s->next;
@@ -281,7 +280,7 @@ void Manager::PrintAddStu()
             cin >> str;
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                Mprintf("请输入数字,重新输入数学:\n");
+                Mprintf("请输入数字,重新输入数学:");
                 cin >> str;
             }
             S.ma = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
@@ -380,7 +379,7 @@ void Manager::PrintAddStu()
                 AddStu(&S); 
                 printf("\n\n");
                 Cprintf("添加成功!");
-                SetTextWhite();
+                
                 Sleep(2000);
                break;
             }
@@ -389,6 +388,7 @@ void Manager::PrintAddStu()
                 break;
             }
         }
+        SetTextWhite();
         
     }
     
