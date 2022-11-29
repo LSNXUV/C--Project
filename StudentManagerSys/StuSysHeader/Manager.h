@@ -214,25 +214,32 @@ void Manager::PrintAddStu()
         }
         
         //添加学生信息
-        ShowCursor(true);
 
+        ShowCursor(true);
         printf("\n");
         Mprintf("请输入学号:");
         
         while (1)
         {
+            SetTextGreen();
             cin >> str;
+            SetTextWhite();
+            printf("\n");
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-
-                Mprintf("学号只能是数字,请重新输入:");
-                cin >> str;
+                SetTextGreen();Cprintf("学号只能是数字\n");SetTextWhite();
+                Mprintf("请重新输入:");
+                SetTextGreen();cin >> str;SetTextWhite();
+                printf("\n");
             }
             
             S.id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
             if (S.id < 20220000 || S.id > 20229999)
             {
-                Mprintf("学号格式错误,请重新输入:");
+                SetTextGreen();
+                Cprintf("学号格式错误\n");
+                SetTextWhite();
+                Mprintf("请重新输入:");
             }
             else
             {
@@ -243,51 +250,59 @@ void Manager::PrintAddStu()
                 }
                 if(s)
                 {
-                    Mprintf("学号已存在!请重新输入:");
+                    SetTextGreen();Cprintf("学号已存在\n");SetTextWhite();
+                    Mprintf("请重新输入:");
                     s = Head->next;
                 }else{
                     break;
                 }
-            
             }
-            
         }
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入姓名:");
+        SetTextGreen();
         scanf("%s", S.name);
+        printf("\n");
+        SetTextWhite();
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入性别:");
         while (1)
         {
-            scanf("%s", S.sex);
+            SetTextGreen();scanf("%s", S.sex);SetTextWhite();printf("\n");
             if (strcmp(S.sex, "男") == 0 || strcmp(S.sex, "女") == 0)
             {
                 break;
             }
             else
             {
-                Mprintf("性别错误,请重新输入:");
+                Cprintf("非地球人不能添加信息哦\n");
+                Mprintf("请重新输入:");
             }
         };
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入数学成绩:");
         while (1)
         {
 
-            cin >> str;
+            SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                Mprintf("请输入数字,重新输入数学:");
-                cin >> str;
+                SetTextGreen();Cprintf("请输入正整数\n");SetTextWhite();
+                Mprintf("请重新输入:");
+                SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
             S.ma = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if ((S.ma < 0) || (S.ma > 100))
             {
-                Mprintf("数学满分100,请重新输入:");
+                SetTextGreen();Cprintf("数学满分100\n");SetTextWhite();
+                Mprintf("请重新输入:");
             }
             else
             {
@@ -295,21 +310,24 @@ void Manager::PrintAddStu()
             }
         }
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入英语成绩:");
         while (1)
         {
-            cin >> str;
+            SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                Mprintf("请输入数字,重新输入英语:\n");
-                cin >> str;
+                SetTextGreen();Cprintf("请输入正整数\n");SetTextWhite();
+                Mprintf("请重新输入:");
+                SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
             S.en = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.en < 0 || S.en > 100)
             {
-                Mprintf("英语满分100,请重新输入:");
+                SetTextGreen();Cprintf("英语满分100\n");SetTextWhite();
+                Mprintf("请重新输入:");
             }
             else
             {
@@ -317,21 +335,24 @@ void Manager::PrintAddStu()
             }
         }
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入体育成绩:");
         while (1)
         {
-            cin >> str;
+            SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                Mprintf("请输入数字,重新输入体育:");
-                cin >> str;
+                SetTextGreen();Cprintf("请输入正整数\n");SetTextWhite();
+                Mprintf("请重新输入:");
+                SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
             S.et = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.et < 0 || S.et > 100)
             {
-                Mprintf("体育满分100,请重新输入:");
+                SetTextGreen();Cprintf("体育满分100\n");SetTextWhite();
+                Mprintf("请重新输入:");
             }
             else
             {
@@ -339,22 +360,25 @@ void Manager::PrintAddStu()
             }
         }
 
+        AddWelcome(10);ShowCursor(true);
         printf("\n");
         Mprintf("请输入计算机成绩:");
         while (1)
         {
 
-            cin >> str;
+            SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             while (!IsRegexInput(str)) // 判断输入的内容是否为整形
             {
-                Mprintf("请输入数字,重新输入计算机:\n");
-                cin >> str;
+                SetTextGreen();Cprintf("请输入正整数\n");SetTextWhite();
+                Mprintf("请重新输入:");
+                SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
             S.pc = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
             if (S.pc < 0 || S.pc > 100)
             {
-                Mprintf("计算机满分100,请重新输入:");
+                SetTextGreen();Cprintf("计算机满分100\n");SetTextWhite();
+                Mprintf("请重新输入:");
             }
             else
             {
@@ -366,7 +390,7 @@ void Manager::PrintAddStu()
         S.avr = S.sum/4;
         S.next = NULL;
 
-        AddWelcome(0);
+        AddWelcome(10);
         PrintSingleStu(S);
         printf("\n\n");
         SetTextGreen();

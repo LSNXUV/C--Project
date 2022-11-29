@@ -120,7 +120,7 @@ void StuSys::menu()
 	Cprintf("请输入管理员账号密码\n");
 	SetTextWhite();
 	
-	while(true)
+	/* while(true)
 	{
 		
 
@@ -165,9 +165,11 @@ void StuSys::menu()
 
 		welcome(0);
 		printf("\n\n");
+		SetTextGreen();
 		Cprintf("账号或密码错误!\n\n");
+		SetTextWhite();
 		
-	}
+	} */
 
 
 	int choice;
