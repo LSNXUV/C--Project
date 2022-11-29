@@ -5,45 +5,45 @@
 
 class GoBang
 {
-private:
+    private:
 
-    int BoardSize;
+        int BoardSize;
 
-    int ChessBoard[MaxSize][MaxSize];
-    int BoardLocationX;
-    int BoardLocationY;
-    Records records;
+        int ChessBoard[MaxSize][MaxSize];
+        int BoardLocationX;
+        int BoardLocationY;
+        Records records;
 
-public:
+    public:
 
-    void welcome(int delay);
-    void menu();
+        void welcome(int delay);
+        void menu();
 
-    void InitChess();
+        void InitChess();
 
-    void gotoxy(int x, int y);
-    void DoublePlay();
-    bool Win(int x,int y,int player);
-    void DrawBoard();
-    void ClearPoint(int x,int y,int player);
-    void DrawPoint(int x,int y,int player);
+        void gotoxy(int x, int y);
+        void DoublePlay();
+        bool Win(int x,int y,int player);
+        void DrawBoard();
+        void ClearPoint(int x,int y,int player);
+        void DrawPoint(int x,int y,int player);
 
-    void ShowCursor(bool visible);
-    void SetTextWhite();
-    void SetTextRed();
-    void SetTextBlue();
-    void SetTextGreen();
+        void ShowCursor(bool visible);
+        void SetTextWhite();
+        void SetTextRed();
+        void SetTextBlue();
+        void SetTextGreen();
 
-    void Mprintf(string str);
-    void Cprintf(string str);
+        void Mprintf(string str);
+        void Cprintf(string str);
 
-    void DeleteGoAway();
-    void SizeGoAway();
+        void DeleteGoAway();
+        void SizeGoAway();
 
-    void goodbye();
+        void goodbye();
 
-    GoBang(/* args */);
-    ~GoBang();
+        GoBang(/* args */);
+        ~GoBang();
 };
 
 GoBang::GoBang(/* args */)
@@ -95,7 +95,6 @@ void GoBang::menu()
 
     
     int choice;
-    // welcome(20);
 
     while(true)
     {
