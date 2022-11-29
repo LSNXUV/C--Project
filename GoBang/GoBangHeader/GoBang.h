@@ -50,7 +50,7 @@ GoBang::GoBang(/* args */)
 {
     BoardSize = 15;
     BoardLocationX = 10;
-    BoardLocationY = 5;
+    BoardLocationY = 7;
     InitChess();
 }
 
@@ -92,7 +92,7 @@ void GoBang::menu()
     sprintf(Title,"% 115s","五子棋终结者");
 	SetConsoleTitleA(Title);
     system("mode con cols=96");
-
+    
     
     int choice;
 
@@ -205,7 +205,7 @@ bool GoBang::Win(int x,int y,int player)
 
 void GoBang::DrawBoard()
 {
-    system("cls");
+    // system("cls");
     char ChessRow[100];
     gotoxy(0,BoardLocationY);
     for(int i = 0;i<BoardSize;i++)
@@ -260,10 +260,21 @@ void GoBang::DoublePlay()
 {
 
     printf("\n\n");
+    SetTextGreen();
     Cprintf("欢迎来到五子棋终结者，按任意键开始游戏");
+    SetTextWhite();
     getch();
+
     system("cls");
-    printf("\n\n\n\n");
+    
+    // system("color F0");
+    gotoxy(0,2);
+    Cprintf("五子棋终结者");
+    gotoxy(0,4);
+    SetTextGreen();
+    Cprintf("w a s d 对应 ↑ ← ↓ →       Enter 确认落子      Backspace 悔棋      Esc 退出游戏");
+    SetTextWhite();
+    
     int choice;
     int step = 1;
     Records records;
@@ -350,10 +361,13 @@ void GoBang::DoublePlay()
 
         case 13:
             if(Win(x,y,2-player%2)){
-                gotoxy(0,37);
-                if(player == 1) Cprintf("玩家一(绿方)获胜！");
-                else Cprintf("玩家二(蓝方)获胜！");
-                Sleep(5000);
+                gotoxy(0,40);
+
+                if(player == 1){ SetTextGreen();Cprintf("玩家一(绿方)获胜！");SetTextWhite();}
+                else {SetTextBlue(); Cprintf("玩家二(蓝方)获胜！");SetTextWhite();}
+                printf("\n\n");
+                Cprintf("按任意键退出");
+                getch();
                 return;
             }
             

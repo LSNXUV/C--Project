@@ -2,9 +2,6 @@
 
 #include "GoBangHeader/GoBang.h"
 
-using namespace std;
-
-
 
 int main(){
 
