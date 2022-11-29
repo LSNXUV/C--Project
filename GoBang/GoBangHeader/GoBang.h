@@ -1,4 +1,5 @@
 #include "Package.h"
+#include "Records.h"
 
 #define MaxSize 70
 
@@ -9,6 +10,9 @@ private:
     int BoardSize;
 
     int ChessBoard[MaxSize][MaxSize];
+    int BoardLocationX;
+    int BoardLocationY;
+    Records records;
 
 public:
 
@@ -21,8 +25,8 @@ public:
     void DoublePlay();
     bool Win(int x,int y,int player);
     void DrawBoard();
+    void ClearPoint(int x,int y,int player);
     void DrawPoint(int x,int y,int player);
-    void Preview(int x,int y,int player);
 
     void ShowCursor(bool visible);
     void SetTextWhite();
@@ -45,6 +49,8 @@ public:
 GoBang::GoBang(/* args */)
 {
     BoardSize = 15;
+    BoardLocationX = 10;
+    BoardLocationY = 5;
     InitChess();
 }
 
@@ -87,7 +93,7 @@ void GoBang::menu()
 	SetConsoleTitleA(Title);
     system("mode con cols=96");
 
-
+    
     int choice;
     // welcome(20);
 
@@ -117,6 +123,7 @@ void GoBang::menu()
 
     }
     goodbye();
+    return;
 }
 
 void GoBang::gotoxy(int x, int y) {					//移动光标
@@ -201,11 +208,13 @@ void GoBang::DrawBoard()
 {
     system("cls");
     char ChessRow[100];
+    gotoxy(0,BoardLocationY);
     for(int i = 0;i<BoardSize;i++)
     {
         if(i!=0) printf("\n          |────|────|────|────|────|────|────|────|────|────|────|────|────|────|─── |\n          ");
-        else printf("\n           ─────────────────────────────────────────────────────────────────────────\n          ");
-        // printf("\n          ───────────────────────────────────────────────────────────────────────────\n          ");
+        else printf("           ─────────────────────────────────────────────────────────────────────────\n          ");
+        // printf("\n          ─────────────────────────────────────────────────────────────────────────\n          ");
+        Sleep(10);
         for(int j = 0;j<BoardSize;j++)
         {
             printf("| ");
@@ -228,6 +237,7 @@ void GoBang::DrawBoard()
             printf(" ");
         }
         printf("|");
+        Sleep(10);
     }
     printf("\n           ─────────────────────────────────────────────────────────────────────────\n");
 
@@ -235,10 +245,17 @@ void GoBang::DrawBoard()
 
 void GoBang::DrawPoint(int x,int y,int player)
 {
-    gotoxy(12+5*y,2+x*2);
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
     if(player == 1) {SetTextGreen();printf("●");SetTextWhite();}
     else {SetTextBlue();printf("●");SetTextWhite();}
 }
+
+void GoBang::ClearPoint(int x,int y,int player)
+{
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
+    printf("  ");
+}
+
 
 void GoBang::DoublePlay()
 {
@@ -250,17 +267,17 @@ void GoBang::DoublePlay()
     printf("\n\n\n\n");
     int choice;
     int step = 1;
-    int preX = 7,preY = 7;
+    Records records;
+    Point point;
     int x = 7,y = 7,player = 1;
     ChessBoard[x][y] = player;
+
     DrawBoard();
     while(true)
     {
         
         player = 2-player%2;
         ChessBoard[x][y] = player;
-        // DrawBoard();
-
         while(true)
         {
             choice = getch();
@@ -278,10 +295,8 @@ void GoBang::DoublePlay()
         {
         case 87:
         case 119:
-            preX = x;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
             x = (x+BoardSize-1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -291,10 +306,8 @@ void GoBang::DoublePlay()
             break;
         case 65:
         case 97:
-            preY = y;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
             y = (y+BoardSize-1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -304,10 +317,8 @@ void GoBang::DoublePlay()
             break;
         case 83:
         case 115:
-            preX = x;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
             x = (x+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -317,10 +328,8 @@ void GoBang::DoublePlay()
             break;
         case 68:
         case 100:
-            preY = y;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
             y = (y+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -328,37 +337,43 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-        case 13:
 
+        case 8:
+            if(records.Count == 0) break;
+        
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            point = records.Withdraw();
+            x = point.x,y = point.y,player = point.player;
+    
+            DrawPoint(x,y,player);
+            break;
+
+        case 13:
             if(Win(x,y,2-player%2)){
-                gotoxy(30,37);
+                gotoxy(0,37);
                 if(player == 1) Cprintf("玩家一(绿方)获胜！");
                 else Cprintf("玩家二(蓝方)获胜！");
                 Sleep(5000);
                 return;
             }
+            
+            records.AddRecord(x,y,player);
+
             ChessBoard[x][y] = player++;
             player = 2-player%2;
-            preX = x,preY = y;
             step = 0;
             while(true)
             {
                 if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 step++;
             }
             
             break;
-        case 8:
-
-            ChessBoard[x][y] = 0;
-            ChessBoard[preX][preY] = 0;
-            player++;
-            x = preX,y = preY;
-            break;
-
+        
         default:
             break;
         }
@@ -368,7 +383,6 @@ void GoBang::DoublePlay()
 
     // getch();
 }
-
 
 void GoBang::ShowCursor(bool visible) { 
 
