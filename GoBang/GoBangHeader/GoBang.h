@@ -25,6 +25,7 @@ class GoBang
         void DoublePlay();
         bool Win(int x,int y,int player);
         void DrawBoard();
+        void DrawWinPoint(int x,int y);
         void ClearPoint(int x,int y,int player);
         void DrawPoint(int x,int y,int player);
 
@@ -151,7 +152,18 @@ bool GoBang::Win(int x,int y,int player)
             else  break;
         }
         if(sum == 5) {
-            
+            for(int k = 0;k<3;k++){
+                for(int j = i;j<i+5;j++)
+                {
+                    DrawWinPoint(j,y);
+                    Sleep(50);
+                    DrawPoint(j,y,player);
+                }
+            }
+            for(int j = i;j<i+5;j++)
+            {
+                DrawWinPoint(j,y);
+            }
             return true;
         }
     }
@@ -166,6 +178,18 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int j = i;j<i+5;j++)
+                {
+                    DrawWinPoint(x,j);
+                    Sleep(50);
+                    DrawPoint(x,j,player);
+                }
+            }
+            for(int j = i;j<i+5;j++)
+            {
+                DrawWinPoint(x,j);
+            }
             return true;
         }
     }
@@ -182,6 +206,16 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int p = i,q = j;p < i+5;p++,q++)
+                {
+                    DrawWinPoint(p,q);Sleep(50);DrawPoint(p,q,player);
+                }
+            }
+            for(int p = i,q = j;p < i+5;p++,q++)
+            {
+                DrawWinPoint(p,q);
+            }
             return true;
         }
     }
@@ -196,6 +230,16 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int p = i,q = j;p < i+5;p++,q--)
+                {
+                    DrawWinPoint(p,q);Sleep(50);DrawPoint(p,q,player);
+                }
+            }
+            for(int p = i,q = j;p < i+5;p++,q--)
+            {
+                DrawWinPoint(p,q);
+            }
             return true;
         }
     }
@@ -242,6 +286,13 @@ void GoBang::DrawBoard()
 
 }
 
+void GoBang::DrawWinPoint(int x,int y)
+{
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
+    Sleep(50);
+    printf("●");
+}
+
 void GoBang::DrawPoint(int x,int y,int player)
 {
     gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
@@ -272,7 +323,7 @@ void GoBang::DoublePlay()
     Cprintf("五子棋终结者");
     gotoxy(0,4);
     SetTextGreen();
-    Cprintf("w a s d 对应 ↑ ← ↓ →       Enter 确认落子      Backspace 悔棋      Esc 退出游戏");
+    Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)       Enter 确认落子      Backspace 悔棋      Esc 退出游戏");
     SetTextWhite();
     
     int choice;
@@ -295,6 +346,8 @@ void GoBang::DoublePlay()
                 choice == 65 || choice == 97 ||
                 choice == 83 || choice == 115 ||
                 choice == 68 || choice == 100 ||
+                choice == 72 || choice == 80 ||
+                choice == 75 || choice == 77 ||
                 choice == 13 || choice == 8 ||
                 choice == 27
             ) break;
@@ -305,6 +358,18 @@ void GoBang::DoublePlay()
         {
         case 87:
         case 119:
+            if(player != 1) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 72:
+            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize-1)%BoardSize;
@@ -316,6 +381,18 @@ void GoBang::DoublePlay()
             break;
         case 65:
         case 97:
+            if(player != 1) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            y = (y+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 75:
+            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize-1)%BoardSize;
@@ -327,6 +404,18 @@ void GoBang::DoublePlay()
             break;
         case 83:
         case 115:
+            if(player != 1) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize+1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 80:
+            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize+1)%BoardSize;
@@ -338,6 +427,18 @@ void GoBang::DoublePlay()
             break;
         case 68:
         case 100:
+            if(player != 1) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            y = (y+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                y = (y+BoardSize+1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 77:
+            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize+1)%BoardSize;
@@ -376,6 +477,7 @@ void GoBang::DoublePlay()
             ChessBoard[x][y] = player++;
             player = 2-player%2;
             step = 0;
+
             while(true)
             {
                 if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
@@ -396,6 +498,7 @@ void GoBang::DoublePlay()
 
     // getch();
 }
+
 
 void GoBang::ShowCursor(bool visible) { 
 
