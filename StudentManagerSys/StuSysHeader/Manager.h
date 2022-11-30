@@ -29,7 +29,6 @@ class StuSys
         void DeleteGoAway();
         void EmptyRemind();
 
-
         void goodbye();
         void Free(Student *Head);
         StuSys(/* args */);

@@ -123,7 +123,6 @@ void StuSys::menu()
 	while(true)
 	{
 		
-
 		printf("\n");
 		Mprintf("username:");
 		cin>>username;

@@ -19,11 +19,6 @@ class Student
 
         Student *next;//指针域 
 
-        void operator+(Student *S)
-        {
-            this->next = S;
-        }
-
         Student(/* args */);
         ~Student();
 };
