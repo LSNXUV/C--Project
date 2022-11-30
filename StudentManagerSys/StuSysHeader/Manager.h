@@ -411,7 +411,7 @@ void Manager::PrintAddStu()
             choice = getch();
             if(choice == 89 || choice == 121) 
             {
-                AddStu(Stu); 
+                AddStu(Stu);
                 printf("\n\n");
                 Cprintf("Ìí¼Ó³É¹¦!");
                 
