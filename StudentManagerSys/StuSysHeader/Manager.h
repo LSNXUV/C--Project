@@ -191,12 +191,14 @@ void Manager::AddWelcome(int delay)
 void Manager::PrintAddStu()
 {
 
-    Student S,*s;
+    Student *s;
     int choice;
     string str;
 
     while(true)
     {
+        Student *Stu = new Student;
+
         AddWelcome(20);
 
         while(true)
@@ -233,8 +235,8 @@ void Manager::PrintAddStu()
                 printf("\n");
             }
             
-            S.id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
-            if (S.id < 20220000 || S.id > 20229999)
+            Stu->id = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
+            if (Stu->id < 20220000 || Stu->id > 20229999)
             {
                 SetTextGreen();
                 Cprintf("学号格式错误\n");
@@ -244,15 +246,16 @@ void Manager::PrintAddStu()
             else
             {
                 s = Head->next;
-                while(s && s->id != S.id)
+                while(s && s->id != Stu->id)
                 {
+                    // cout<<s->id<<" -- "<<S.id<<endl;
                     s = s->next;
                 }
                 if(s)
                 {
+                    // cout<<s->id<<" -- "<<S.id<<endl;
                     SetTextGreen();Cprintf("学号已存在\n");SetTextWhite();
                     Mprintf("请重新输入:");
-                    s = Head->next;
                 }else{
                     break;
                 }
@@ -263,15 +266,15 @@ void Manager::PrintAddStu()
         printf("\n");
         Mprintf("请输入姓名:");
         SetTextGreen();
-        scanf("%s", S.name);
+        scanf("%s", Stu->name);
         printf("\n");
-        while(strlen(S.name)>=6)
+        while(strlen(Stu->name) > 6)
         {
             SetTextGreen();
             printf("\n");Cprintf("姓名长度不能超过3");printf("\n");SetTextWhite();
             Mprintf("请重新输入:");
             SetTextGreen();
-            scanf("%s", S.name);
+            scanf("%s", Stu->name);
         }
         SetTextWhite();
 
@@ -280,8 +283,8 @@ void Manager::PrintAddStu()
         Mprintf("请输入性别:");
         while (1)
         {
-            SetTextGreen();scanf("%s", S.sex);SetTextWhite();printf("\n\n");
-            if (strcmp(S.sex, "男") == 0 || strcmp(S.sex, "女") == 0)
+            SetTextGreen();scanf("%s", Stu->sex);SetTextWhite();printf("\n\n");
+            if (strcmp(Stu->sex, "男") == 0 || strcmp(Stu->sex, "女") == 0)
             {
                 break;
             }
@@ -305,9 +308,9 @@ void Manager::PrintAddStu()
                 Mprintf("请重新输入:");
                 SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
-            S.ma = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
+            Stu->ma = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
-            if ((S.ma < 0) || (S.ma > 100))
+            if ((Stu->ma < 0) || (Stu->ma > 100))
             {
                 SetTextGreen();Cprintf("数学满分100\n");SetTextWhite();
                 Mprintf("请重新输入:");
@@ -330,9 +333,9 @@ void Manager::PrintAddStu()
                 Mprintf("请重新输入:");
                 SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
-            S.en = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
+            Stu->en = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
-            if (S.en < 0 || S.en > 100)
+            if (Stu->en < 0 || Stu->en > 100)
             {
                 SetTextGreen();Cprintf("英语满分100\n");SetTextWhite();
                 Mprintf("请重新输入:");
@@ -355,9 +358,9 @@ void Manager::PrintAddStu()
                 Mprintf("请重新输入:");
                 SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
-            S.et = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
+            Stu->et = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
-            if (S.et < 0 || S.et > 100)
+            if (Stu->et < 0 || Stu->et > 100)
             {
                 SetTextGreen();Cprintf("体育满分100\n");SetTextWhite();
                 Mprintf("请重新输入:");
@@ -381,9 +384,9 @@ void Manager::PrintAddStu()
                 Mprintf("请重新输入:");
                 SetTextGreen();cin >> str;SetTextWhite();printf("\n");
             }
-            S.pc = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
+            Stu->pc = atoi(str.c_str()); //输入没有问题，进行字符串转换为整形
 
-            if (S.pc < 0 || S.pc > 100)
+            if (Stu->pc < 0 || Stu->pc > 100)
             {
                 SetTextGreen();Cprintf("计算机满分100\n");SetTextWhite();
                 Mprintf("请重新输入:");
@@ -394,12 +397,12 @@ void Manager::PrintAddStu()
             }
         }
 
-        S.sum = S.en+S.et+S.ma+S.pc;
-        S.avr = S.sum/4;
-        S.next = NULL;
+        Stu->sum = Stu->en+Stu->et+Stu->ma+Stu->pc;
+        Stu->avr = Stu->sum/4;
+        Stu->next = NULL;
 
         AddWelcome(10);
-        PrintSingleStu(S);
+        PrintSingleStu(*Stu);
         printf("\n\n");
         SetTextGreen();
         Cprintf("确认信息?  Y/N");
@@ -408,7 +411,7 @@ void Manager::PrintAddStu()
             choice = getch();
             if(choice == 89 || choice == 121) 
             {
-                AddStu(&S); 
+                AddStu(Stu); 
                 printf("\n\n");
                 Cprintf("添加成功!");
                 
