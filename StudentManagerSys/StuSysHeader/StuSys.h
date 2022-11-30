@@ -194,6 +194,10 @@ void StuSys::menu()
 			StuA.menu();
 			welcome(20);
 			break;
+		case 72:
+		case 104:
+			system("start ”√ªß ÷≤·.docx");
+			break;
 		default:
 			break;
 		}
