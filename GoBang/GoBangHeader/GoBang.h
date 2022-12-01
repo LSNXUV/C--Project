@@ -16,6 +16,7 @@ class GoBang
 
     public:
 
+        void InitWindow();
         void welcome(int delay);
         void menu();
 
@@ -55,6 +56,19 @@ GoBang::GoBang(/* args */)
     InitChess();
 }
 
+void GoBang::InitWindow()
+{
+    //关闭右上角最大化和关闭
+	SizeGoAway();
+    DeleteGoAway();
+	//设置管理权限图标
+	HWND hwnd = GetConsoleWindow();
+    SendMessage(hwnd, WM_SETICON, 0, (LPARAM)
+    LoadIcon((HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),MAKEINTRESOURCE(32518)));
+	
+	system("mode con cols=96 lines=47");
+}
+
 void GoBang::InitChess()
 {
     for(int i = 0;i<BoardSize;i++)
@@ -87,13 +101,10 @@ void GoBang::welcome(int delay)
 
 void GoBang::menu()
 {
+    InitWindow();
     char Title[96];
-    SizeGoAway();
-    DeleteGoAway();
-    sprintf(Title,"% 115s","五子棋终结者");
+    sprintf(Title,"% 114s","五子棋终结者");
 	SetConsoleTitleA(Title);
-    system("mode con cols=96");
-    
     
     int choice;
 
@@ -249,7 +260,7 @@ bool GoBang::Win(int x,int y,int player)
 
 void GoBang::DrawBoard()
 {
-    // system("cls");
+
     char ChessRow[100];
     gotoxy(0,BoardLocationY);
     for(int i = 0;i<BoardSize;i++)
@@ -260,24 +271,8 @@ void GoBang::DrawBoard()
         Sleep(10);
         for(int j = 0;j<BoardSize;j++)
         {
-            printf("| ");
-            if(ChessBoard[i][j] == 0)
-            {
-                printf("  ");
-            }
-            else if(ChessBoard[i][j] == 1)
-            {
-                SetTextGreen();
-                printf("●");
-                SetTextWhite();
-            }
-            else
-            {
-                SetTextBlue();
-                printf("●");
-                SetTextWhite();
-            }
-            printf(" ");
+            printf("|    ");Sleep(5);
+        
         }
         printf("|");
         Sleep(10);
@@ -320,11 +315,11 @@ void GoBang::DoublePlay()
     
     // system("color F0");
     gotoxy(0,2);
-    Cprintf("五子棋终结者");
+    SetTextGreen();Cprintf("五子棋终结者");Sleep(20);SetTextWhite();
     gotoxy(0,4);
-    SetTextGreen();
-    Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)       Enter 确认落子      Backspace 悔棋      Esc 退出游戏");
-    SetTextWhite();
+    
+    Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)    Enter 确认落子    Backspace 悔棋    Esc 退出游戏");Sleep(20);
+    
     
     int choice;
     int step = 1;
@@ -334,6 +329,7 @@ void GoBang::DoublePlay()
     ChessBoard[x][y] = player;
 
     DrawBoard();
+    DrawPoint(x,y,player);
     while(true)
     {
         
@@ -466,9 +462,8 @@ void GoBang::DoublePlay()
 
                 if(player == 1){ SetTextGreen();Cprintf("玩家一(绿方)获胜！");SetTextWhite();}
                 else {SetTextBlue(); Cprintf("玩家二(蓝方)获胜！");SetTextWhite();}
-                printf("\n\n");
-                Cprintf("按任意键退出");
-                getch();
+                printf("\n\n");Cprintf("按Esc退出");
+                while(getch()!=27);
                 return;
             }
             
@@ -478,13 +473,19 @@ void GoBang::DoublePlay()
             player = 2-player%2;
             step = 0;
 
-            while(true)
+            while(step<BoardSize)
             {
                 if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 step++;
+            }
+            if(step == BoardSize) {
+                gotoxy(0,40);Cprintf("你故意和棋的样子真狼狈(≧?≦)?");
+                printf("\n\n");SetTextGreen();Cprintf("按Esc退出");SetTextWhite();
+                while(getch()!=27);
+                return;
             }
             
             break;
@@ -494,9 +495,7 @@ void GoBang::DoublePlay()
         }
 
     }
-    // DrawBoard();
 
-    // getch();
 }
 
 
@@ -532,6 +531,7 @@ void GoBang::Mprintf(string str)
 {
 	cout<<setw(48)<<str;
 }
+
 void GoBang::Cprintf(string str)
 {
 	cout<<setw(48+str.length()/2)<<str;
@@ -545,7 +545,7 @@ void GoBang::SizeGoAway() {
 		GetWindowLongPtrA(GetConsoleWindow(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
 }
 
-//取消关闭  谨慎使用，坑人专用
+//取消关闭  
 void GoBang::DeleteGoAway(){
 	DeleteMenu(GetSystemMenu(GetConsoleWindow(), FALSE),
 		SC_CLOSE, MF_DISABLED);
