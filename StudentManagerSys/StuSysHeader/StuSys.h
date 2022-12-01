@@ -100,16 +100,27 @@ void StuSys::welcome(int delay)
 
 }
 
-void StuSys::menu()
-{
-
-	char Title[96];
+void StuSys::InitWindow()
+{	
+	//关闭右上角最大化和关闭
 	SizeGoAway();
     DeleteGoAway();
+	//设置管理权限图标
+	HWND hwnd = GetConsoleWindow();
+    SendMessage(hwnd, WM_SETICON, 0, (LPARAM)
+    LoadIcon((HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),MAKEINTRESOURCE(32518)));
+	
+	system("mode con cols=96");
+	
+}
+
+void StuSys::menu()
+{
+	InitWindow();
+	char Title[96];
 	sprintf(Title,"% 115s","学生信息管理和分析系统");
 	SetConsoleTitleA(Title);
-    system("mode con cols=96");
-
+	
     welcome(20);
 
 	string username;
