@@ -1,51 +1,72 @@
 #include "Package.h"
+#include "Records.h"
 
 #define MaxSize 70
 
 class GoBang
 {
-private:
+    private:
 
-    int BoardSize;
+        int BoardSize;
 
-    int ChessBoard[MaxSize][MaxSize];
+        int ChessBoard[MaxSize][MaxSize];
+        int BoardLocationX;
+        int BoardLocationY;
+        Records records;
 
-public:
+    public:
 
-    void welcome(int delay);
-    void menu();
+        void InitWindow();
+        void welcome(int delay);
+        void menu();
 
-    void InitChess();
+        void InitChess();
 
-    void gotoxy(int x, int y);
-    void DoublePlay();
-    bool Win(int x,int y,int player);
-    void DrawBoard();
-    void DrawPoint(int x,int y,int player);
-    void Preview(int x,int y,int player);
+        void gotoxy(int x, int y);
+        void DoublePlay();
+        bool Win(int x,int y,int player);
+        void DrawBoard();
+        void DrawWinPoint(int x,int y);
+        void ClearPoint(int x,int y,int player);
+        void DrawPoint(int x,int y,int player);
 
-    void ShowCursor(bool visible);
-    void SetTextWhite();
-    void SetTextRed();
-    void SetTextBlue();
-    void SetTextGreen();
+        void ShowCursor(bool visible);
+        void SetTextWhite();
+        void SetTextRed();
+        void SetTextBlue();
+        void SetTextGreen();
 
-    void Mprintf(string str);
-    void Cprintf(string str);
+        void Mprintf(string str);
+        void Cprintf(string str);
 
-    void DeleteGoAway();
-    void SizeGoAway();
+        void DeleteGoAway();
+        void SizeGoAway();
 
-    void goodbye();
+        void goodbye();
 
-    GoBang(/* args */);
-    ~GoBang();
+        GoBang(/* args */);
+        ~GoBang();
 };
 
 GoBang::GoBang(/* args */)
 {
     BoardSize = 15;
+    BoardLocationX = 10;
+    BoardLocationY = 7;
     InitChess();
+}
+
+void GoBang::InitWindow()
+{
+    //关闭右上角最大化和关闭
+	SizeGoAway();
+    DeleteGoAway();
+	//设置管理权限图标
+	HWND hwnd = GetConsoleWindow();
+    SendMessage(hwnd, WM_SETICON, 0, (LPARAM)
+    LoadIcon((HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),MAKEINTRESOURCE(32518)));
+	
+	system("mode con cols=96 lines=47");
 }
 
 void GoBang::InitChess()
@@ -80,16 +101,12 @@ void GoBang::welcome(int delay)
 
 void GoBang::menu()
 {
+    InitWindow();
     char Title[96];
-    SizeGoAway();
-    DeleteGoAway();
-    sprintf(Title,"% 115s","五子棋终结者");
+    sprintf(Title,"% 114s","五子棋终结者");
 	SetConsoleTitleA(Title);
-    system("mode con cols=96");
-
-
+    
     int choice;
-    // welcome(20);
 
     while(true)
     {
@@ -117,6 +134,7 @@ void GoBang::menu()
 
     }
     goodbye();
+    return;
 }
 
 void GoBang::gotoxy(int x, int y) {					//移动光标
@@ -145,7 +163,18 @@ bool GoBang::Win(int x,int y,int player)
             else  break;
         }
         if(sum == 5) {
-            
+            for(int k = 0;k<3;k++){
+                for(int j = i;j<i+5;j++)
+                {
+                    DrawWinPoint(j,y);
+                    Sleep(50);
+                    DrawPoint(j,y,player);
+                }
+            }
+            for(int j = i;j<i+5;j++)
+            {
+                DrawWinPoint(j,y);
+            }
             return true;
         }
     }
@@ -160,6 +189,18 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int j = i;j<i+5;j++)
+                {
+                    DrawWinPoint(x,j);
+                    Sleep(50);
+                    DrawPoint(x,j,player);
+                }
+            }
+            for(int j = i;j<i+5;j++)
+            {
+                DrawWinPoint(x,j);
+            }
             return true;
         }
     }
@@ -176,6 +217,16 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int p = i,q = j;p < i+5;p++,q++)
+                {
+                    DrawWinPoint(p,q);Sleep(50);DrawPoint(p,q,player);
+                }
+            }
+            for(int p = i,q = j;p < i+5;p++,q++)
+            {
+                DrawWinPoint(p,q);
+            }
             return true;
         }
     }
@@ -190,6 +241,16 @@ bool GoBang::Win(int x,int y,int player)
             else break;
         }
         if(sum == 5) {
+            for(int k = 0;k<3;k++){
+                for(int p = i,q = j;p < i+5;p++,q--)
+                {
+                    DrawWinPoint(p,q);Sleep(50);DrawPoint(p,q,player);
+                }
+            }
+            for(int p = i,q = j;p < i+5;p++,q--)
+            {
+                DrawWinPoint(p,q);
+            }
             return true;
         }
     }
@@ -199,68 +260,81 @@ bool GoBang::Win(int x,int y,int player)
 
 void GoBang::DrawBoard()
 {
-    system("cls");
+
     char ChessRow[100];
+    gotoxy(0,BoardLocationY);
     for(int i = 0;i<BoardSize;i++)
     {
         if(i!=0) printf("\n          |────|────|────|────|────|────|────|────|────|────|────|────|────|────|─── |\n          ");
-        else printf("\n           ─────────────────────────────────────────────────────────────────────────\n          ");
-        // printf("\n          ───────────────────────────────────────────────────────────────────────────\n          ");
+        else printf("           ─────────────────────────────────────────────────────────────────────────\n          ");
+        // printf("\n          ─────────────────────────────────────────────────────────────────────────\n          ");
+        Sleep(10);
         for(int j = 0;j<BoardSize;j++)
         {
-            printf("| ");
-            if(ChessBoard[i][j] == 0)
-            {
-                printf("  ");
-            }
-            else if(ChessBoard[i][j] == 1)
-            {
-                SetTextGreen();
-                printf("●");
-                SetTextWhite();
-            }
-            else
-            {
-                SetTextBlue();
-                printf("●");
-                SetTextWhite();
-            }
-            printf(" ");
+            printf("|    ");Sleep(5);
+        
         }
         printf("|");
+        Sleep(10);
     }
     printf("\n           ─────────────────────────────────────────────────────────────────────────\n");
 
 }
 
+void GoBang::DrawWinPoint(int x,int y)
+{
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
+    Sleep(50);
+    printf("●");
+}
+
 void GoBang::DrawPoint(int x,int y,int player)
 {
-    gotoxy(12+5*y,2+x*2);
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
     if(player == 1) {SetTextGreen();printf("●");SetTextWhite();}
     else {SetTextBlue();printf("●");SetTextWhite();}
 }
+
+void GoBang::ClearPoint(int x,int y,int player)
+{
+    gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
+    printf("  ");
+}
+
 
 void GoBang::DoublePlay()
 {
 
     printf("\n\n");
+    SetTextGreen();
     Cprintf("欢迎来到五子棋终结者，按任意键开始游戏");
+    SetTextWhite();
     getch();
+
     system("cls");
-    printf("\n\n\n\n");
+    
+    // system("color F0");
+    gotoxy(0,2);
+    SetTextGreen();Cprintf("五子棋终结者");Sleep(20);SetTextWhite();
+    gotoxy(0,4);
+    
+    Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)    Enter 确认落子    Backspace 悔棋    Esc 退出游戏");Sleep(20);
+    
+    
     int choice;
     int step = 1;
-    int preX = 7,preY = 7;
+    Records records;
+    Point point;
     int x = 7,y = 7,player = 1;
     ChessBoard[x][y] = player;
+
     DrawBoard();
+    DrawPoint(x,y,player);
     while(true)
     {
         
         player = 2-player%2;
         ChessBoard[x][y] = player;
-        // DrawBoard();
-
         while(true)
         {
             choice = getch();
@@ -268,6 +342,8 @@ void GoBang::DoublePlay()
                 choice == 65 || choice == 97 ||
                 choice == 83 || choice == 115 ||
                 choice == 68 || choice == 100 ||
+                choice == 72 || choice == 80 ||
+                choice == 75 || choice == 77 ||
                 choice == 13 || choice == 8 ||
                 choice == 27
             ) break;
@@ -278,10 +354,20 @@ void GoBang::DoublePlay()
         {
         case 87:
         case 119:
-            preX = x;
+            if(player != 1) break;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
+            x = (x+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 72:
+            if(player != 2) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
             x = (x+BoardSize-1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -291,10 +377,20 @@ void GoBang::DoublePlay()
             break;
         case 65:
         case 97:
-            preY = y;
+            if(player != 1) break;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
+            y = (y+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 75:
+            if(player != 2) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
             y = (y+BoardSize-1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -304,10 +400,20 @@ void GoBang::DoublePlay()
             break;
         case 83:
         case 115:
-            preX = x;
+            if(player != 1) break;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
+            x = (x+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize+1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
+        case 80:
+            if(player != 2) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
             x = (x+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -317,10 +423,9 @@ void GoBang::DoublePlay()
             break;
         case 68:
         case 100:
-            preY = y;
+            if(player != 1) break;
             ChessBoard[x][y] = 0;
-            gotoxy(12+5*y,2+x*2);
-            printf("  ");
+            ClearPoint(x,y,player);
             y = (y+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
@@ -328,45 +433,69 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-        case 13:
+        case 77:
+            if(player != 2) break;
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            y = (y+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                y = (y+BoardSize+1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
 
+        case 8:
+            if(records.Count == 0) break;
+        
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            point = records.Withdraw();
+            x = point.x,y = point.y,player = point.player;
+    
+            DrawPoint(x,y,player);
+            break;
+
+        case 13:
             if(Win(x,y,2-player%2)){
-                gotoxy(30,37);
-                if(player == 1) Cprintf("玩家一(绿方)获胜！");
-                else Cprintf("玩家二(蓝方)获胜！");
-                Sleep(5000);
+                gotoxy(0,40);
+
+                if(player == 1){ SetTextGreen();Cprintf("玩家一(绿方)获胜！");SetTextWhite();}
+                else {SetTextBlue(); Cprintf("玩家二(蓝方)获胜！");SetTextWhite();}
+                printf("\n\n");Cprintf("按Esc退出");
+                while(getch()!=27);
                 return;
             }
+            
+            records.AddRecord(x,y,player);
+
             ChessBoard[x][y] = player++;
             player = 2-player%2;
-            preX = x,preY = y;
             step = 0;
-            while(true)
+
+            while(step<BoardSize)
             {
                 if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
                 step++;
             }
+            if(step == BoardSize) {
+                gotoxy(0,40);Cprintf("你故意和棋的样子真狼狈(≧?≦)?");
+                printf("\n\n");SetTextGreen();Cprintf("按Esc退出");SetTextWhite();
+                while(getch()!=27);
+                return;
+            }
             
             break;
-        case 8:
-
-            ChessBoard[x][y] = 0;
-            ChessBoard[preX][preY] = 0;
-            player++;
-            x = preX,y = preY;
-            break;
-
+        
         default:
             break;
         }
 
     }
-    // DrawBoard();
 
-    // getch();
 }
 
 
@@ -402,6 +531,7 @@ void GoBang::Mprintf(string str)
 {
 	cout<<setw(48)<<str;
 }
+
 void GoBang::Cprintf(string str)
 {
 	cout<<setw(48+str.length()/2)<<str;
@@ -415,7 +545,7 @@ void GoBang::SizeGoAway() {
 		GetWindowLongPtrA(GetConsoleWindow(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
 }
 
-//取消关闭  谨慎使用，坑人专用
+//取消关闭  
 void GoBang::DeleteGoAway(){
 	DeleteMenu(GetSystemMenu(GetConsoleWindow(), FALSE),
 		SC_CLOSE, MF_DISABLED);

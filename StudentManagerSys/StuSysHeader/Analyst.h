@@ -5,49 +5,49 @@
 class Analyst:public StuSys
 {
 
-private:
-    
-public:
+    private:
+        
+    public:
 
-    void welcome(int delay);
-    void menu();
+        void welcome(int delay);
+        void menu();
 
-    template <class T>
-    void Swap(T &x, T &y)
-    {
-        T tmp = x;
-        x = y;
-        y = tmp;
-    }
-    void SortById();
-    void SortBySum();
-    void SortByMa();
-    void SortByEn();
-    void SortByEt();
-    void SortByPc();
-    void SortByName();
+        template <class T>
+        void Swap(T &x, T &y)
+        {
+            T tmp = x;
+            x = y;
+            y = tmp;
+        }
+        void SortById();
+        void SortBySum();
+        void SortByMa();
+        void SortByEn();
+        void SortByEt();
+        void SortByPc();
+        void SortByName();
 
-    void PtWelcome(int delay);
-    void PrintStu();
-    void PrintStuInfo(bool IsRank,bool IsSingle);
+        void PtWelcome(int delay);
+        void PrintStu();
+        void PrintStuInfo(bool IsRank,bool IsSingle);
 
-    void AtWelcome(int delay);
-    void PrintAnalyst();
-    void IntervalAnalyst(int delay);
-    void IntervalAnalysis(int delay);
-    void TotalAnalyst();
-    void TotalAnalysis();
+        void AtWelcome(int delay);
+        void PrintAnalyst();
+        void IntervalAnalyst(int delay);
+        void IntervalAnalysis(int delay);
+        void TotalAnalyst();
+        void TotalAnalysis();
 
-    void CreatXls();
+        void CreatXls();
 
-    void CtWelcome(int delay);
-    void PrintCreatHtml();
-    void CreatTd(FILE *f,int data);
-    void CreatAnalystHtml();
-    void CreatHtml(bool IsRank,bool IsSingle,string FileName);
+        void CtWelcome(int delay);
+        void PrintCreatHtml();
+        void CreatTd(FILE *f,int data);
+        void CreatAnalystHtml();
+        void CreatHtml(bool IsRank,bool IsSingle,string FileName);
 
-    Analyst(/* args */);
-    ~Analyst();
+        Analyst(/* args */);
+        ~Analyst();
 };
 
 Analyst::Analyst(/* args */)
