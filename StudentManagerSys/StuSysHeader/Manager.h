@@ -1202,7 +1202,7 @@ void Manager::UpdateStu(Student *stu)
 
 void Manager::PrintUpdateStu()
 {
-    int choice,UpdateChoice,id;
+    int choice,id;
     char name[50];
     string str;
     Student S,*s,*stu;
