@@ -206,7 +206,7 @@ void StuSys::menu()
 			break;
 		case 72:
 		case 104:
-			system("start 用户手册.docx");
+			system("start 用户手册.docx 2>nul");
 			break;
 		default:
 			break;
