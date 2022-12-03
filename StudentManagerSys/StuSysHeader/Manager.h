@@ -157,7 +157,6 @@ void Manager::menu()
     }
 }
 
-
 void Manager::AddStu(Student *S)
 {
 

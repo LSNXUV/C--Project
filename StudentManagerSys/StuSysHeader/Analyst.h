@@ -350,6 +350,7 @@ void Analyst::PtWelcome(int delay)
 
 }
 
+
 void Analyst::PrintStuInfo(bool IsRank,bool IsSingle)
 {
     system("cls");
@@ -401,9 +402,11 @@ void Analyst::PrintStuInfo(bool IsRank,bool IsSingle)
         }
     }
     printf("\n");
+
     SetTextGreen();
     Cprintf("按任意键退出");
     SetTextWhite();
+
     getch();
 }
 
@@ -786,13 +789,16 @@ void Analyst::CreatXls()
 
 	oFile<<"学号"<<","<<"姓名"<<","<<"性别"<<","<<"数学"<<","<<"英语"<<","<<"体育"<<","<<"计算机"<<","<<"平均分"<<","<<"总分"<<endl;
     SortBySum();
+
     Student *S = Head->next;
     while(S)
     {
         oFile<<S->id<<","<<S->name<<","<<S->sex<<","<<S->ma<<","<<S->en<<","<<S->et<<","<<S->pc<<","<<S->avr<<","<<S->sum<<endl;
         S = S->next;
     }
+
 	oFile.close();
+    
     system("start Excel/Students.csv 2>nul");
 }
 

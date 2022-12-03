@@ -97,7 +97,6 @@ void StuSys::welcome(int delay)
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
 	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
 
-
 }
 
 void StuSys::InitWindow()
@@ -117,8 +116,10 @@ void StuSys::InitWindow()
 void StuSys::menu()
 {
 	InitWindow();
-	char Title[96];
+
+	char Title[200];
 	sprintf(Title,"% 115s","学生信息管理和分析系统");
+
 	SetConsoleTitleA(Title);
 	
     welcome(20);
@@ -235,6 +236,7 @@ void StuSys::EmptyRemind()
 
 bool StuSys::IsRegexInput(string str) 
 {
+	
 	bool flag;
 	flag = true;
 	regex r("\\d{1,8}");
@@ -260,9 +262,12 @@ void StuSys::SetTextRed()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED | FOREGROUND_INTENSITY);
 }
+
 void StuSys::SetTextGreen()
 {
+
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
 }
 
 void StuSys::SetTextWhite()
@@ -282,6 +287,7 @@ void StuSys::Mprintf(string str)
 {
 	cout<<setw(48)<<str;
 }
+
 void StuSys::Cprintf(string str)
 {
 	cout<<setw(48+str.length()/2)<<str;
