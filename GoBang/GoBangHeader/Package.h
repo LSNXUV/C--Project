@@ -7,4 +7,6 @@
 #include <cmath>
 #include <random>
 
+#define MaxSize 15
+
 using namespace std;

@@ -1,7 +1,7 @@
 #include "Package.h"
 #include "Records.h"
 
-#define MaxSize 70
+
 
 class GoBang
 {
@@ -23,7 +23,9 @@ class GoBang
         void InitChess();
 
         void gotoxy(int x, int y);
+
         void DoublePlay();
+
         bool Win(int x,int y,int player);
         void DrawBoard();
         void DrawWinPoint(int x,int y);

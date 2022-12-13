@@ -157,6 +157,7 @@ void Manager::menu()
     }
 }
 
+
 void Manager::AddStu(Student *S)
 {
 
@@ -1270,7 +1271,7 @@ void Manager::UpdateStu(Student *stu)
 
 void Manager::PrintUpdateStu()
 {
-    int choice,id;
+    int choice,UpdateChoice,id;
     char name[50];
     string str;
     Student S,*s,*stu;
