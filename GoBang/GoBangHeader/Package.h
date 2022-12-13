@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <cstring>
 #include <cmath>
-#include <random>
+#include <regex>
 
 using namespace std;
+
+#define MaxSize 70

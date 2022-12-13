@@ -1,50 +1,71 @@
 
-typedef struct Point
-{
+#include "Record.h"
 
-    int x,y;
-    int player;
-    
-} Point;
 
 class Records
 {
 
-public:
-    Point Points[225];
-    int Count;
+    private:
+        /* data */
+    public:
+        Record *Head,*End;
+        int Count;
 
-    void AddRecord(int x,int y,int player);
-    Point Withdraw();
-    Records(/* args */);
-    ~Records();
+        bool AddRecords(Record *record);
+
+        Record TopRecords();
+
+        bool RemoveRecords(int id);
+
+        
+        Records(/* args */);
+        ~Records();
 
 };
 
-Records::Records(/* args */)
+
+Records::Records()
 {
+    Head = new Record;
+    Head->next = NULL;
+    End = Head;
     Count = 0;
 }
 
-void Records::AddRecord(int x,int y,int player)
-{
-    Points[Count].x = x;
-    Points[Count].y = y;
-    Points[Count++].player = player;
-}
+Records::~Records(){
 
-Point Records::Withdraw()
-{
-    Point point;
-    point.x = Points[Count-1].x;
-    point.y = Points[Count-1].y;
-    point.player = Points[Count---1].player;
-
-    return point;
-}
-
-Records::~Records()
-{
 }
 
 
+
+
+
+
+bool Records::AddRecords(Record *record)
+{
+    Count++;
+    record->EndTime = record->CreateTime();
+    End->next = record;
+    record->next = NULL;
+    End = record;
+    return true;
+}
+
+bool Records::RemoveRecords(int id)
+{
+    if(!Count) return false;
+
+    Record *head = Head;
+    int i = 1;
+    while(head->next && i++ != id) ;
+    if(!head) return false;
+    Record *s = head->next;
+    head->next = s->next;
+    free(s);
+    return true;
+}
+
+Record Records::TopRecords()
+{
+    return *End;
+}

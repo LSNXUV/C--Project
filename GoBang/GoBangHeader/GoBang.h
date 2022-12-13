@@ -1,17 +1,17 @@
-#include "Package.h"
+
 #include "Records.h"
 
-#define MaxSize 70
 
 class GoBang
 {
-    private:
+    protected:
 
         int BoardSize;
 
         int ChessBoard[MaxSize][MaxSize];
         int BoardLocationX;
         int BoardLocationY;
+
         Records records;
 
     public:
@@ -19,17 +19,29 @@ class GoBang
         void InitWindow();
         void welcome(int delay);
         void menu();
-
+        
+        bool Regex(string str);
         void InitChess();
-
+        void EmptyRemind();
         void gotoxy(int x, int y);
-        void DoublePlay();
-        bool Win(int x,int y,int player);
+        
         void DrawBoard();
         void DrawWinPoint(int x,int y);
         void ClearPoint(int x,int y,int player);
         void DrawPoint(int x,int y,int player);
 
+        //双人对战
+        bool Win(int x,int y,int player);
+        void DoublePlay();
+
+        //查看历史棋局
+        void History(int delay);
+        void Review(int id,int delay);
+        void PrintHistory(int delay);
+        void RcWelcome(int delay);
+        void RcMenu();
+
+        
         void ShowCursor(bool visible);
         void SetTextWhite();
         void SetTextRed();
@@ -48,11 +60,14 @@ class GoBang
         ~GoBang();
 };
 
+
 GoBang::GoBang(/* args */)
 {
     BoardSize = 15;
-    BoardLocationX = 10;
+    BoardLocationX = 18;
     BoardLocationY = 7;
+    // record = *(new Record);
+    records = *(new Records);
     InitChess();
 }
 
@@ -61,12 +76,8 @@ void GoBang::InitWindow()
     //关闭右上角最大化和关闭
 	SizeGoAway();
     DeleteGoAway();
-	//设置管理权限图标
-	HWND hwnd = GetConsoleWindow();
-    SendMessage(hwnd, WM_SETICON, 0, (LPARAM)
-    LoadIcon((HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),MAKEINTRESOURCE(32518)));
 	
-	system("mode con cols=96 lines=47");
+	system("mode con cols=112 lines=47");
 }
 
 void GoBang::InitChess()
@@ -80,33 +91,103 @@ void GoBang::InitChess()
     }
 }
 
+void GoBang::EmptyRemind()
+{
+    cout<<"\n";
+    SetTextGreen();
+    for(int i = 3;i>=1;i--)
+    {
+        printf("                                           当前无对局记录  %d 秒后自动退出",i);
+        Sleep(1000);
+        cout<<"\r";
+    }
+    SetTextWhite();
+}
+
+bool GoBang::Regex(string str)
+{
+    bool flag;
+	flag = true;
+	regex r("\\d{1,8}");
+	while (!(flag = regex_match(str, r)))
+	{
+		return flag;
+	}
+	return flag;
+}
+
 void GoBang::welcome(int delay)
 {
     system("cls");
     ShowCursor(false);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆        五 子 棋 终 结 者       ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓★★★★★          ★★★★★★★        ★★★★★〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓★★★★★          ★★★★★★★        ★★★★★〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆            P.双人游戏          ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆            0.退出游戏          ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
-    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                        ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆            五 子 棋 终 结 者           ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                        ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★★★★★              ★★★★★★★            ★★★★★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★★★★★              ★★★★★★★            ★★★★★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                P.双人游戏              ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆              H.查看历史对局            ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                0.退出游戏              ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+}
+
+void GoBang::RcWelcome(int delay)
+{
+    system("cls");
+    ShowCursor(false);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                        ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆            查 看 历 史 棋 局           ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓  ☆                                        ☆  〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★★★★★              ★★★★★★★            ★★★★★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓★★★★★              ★★★★★★★            ★★★★★〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆              H.查看历史对局            ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+	printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆               0.回到主界面             ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓★  ☆                                        ☆  ★〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");Sleep(delay);
+    printf("〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓\n");
+}
+
+void GoBang::RcMenu()
+{
+    int choice;
+
+    while(true)
+    {
+        RcWelcome(20);
+        if(records.Count==0){
+            EmptyRemind();
+            return;
+        }
+        while(true)
+        {
+            choice = getch();
+            if( choice == 96 || choice == 48 ||
+                choice == 72 || choice == 104
+            ) break;
+        }
+        if(choice == 96 || choice == 48) break;
+
+        PrintHistory(20);
+    }
 }
 
 void GoBang::menu()
 {
     InitWindow();
-    char Title[96];
-    sprintf(Title,"% 114s","五子棋终结者");
+    char Title[200];
+    sprintf(Title,"% 134s","五子棋终结者");
 	SetConsoleTitleA(Title);
-    
     int choice;
+
 
     while(true)
     {
@@ -115,7 +196,8 @@ void GoBang::menu()
         {
             choice = getch();
             if( choice == 96 || choice == 48 ||
-                choice == 80 || choice == 112
+                choice == 80 || choice == 112 ||
+                choice == 72 || choice == 104
             ) break;
         }
         if(choice == 96 || choice == 48) break;
@@ -127,7 +209,9 @@ void GoBang::menu()
             InitChess();
             DoublePlay();
             break;
-        
+        case 72:
+        case 104:
+            RcMenu();
         default:
             break;
         }
@@ -261,13 +345,12 @@ bool GoBang::Win(int x,int y,int player)
 void GoBang::DrawBoard()
 {
 
-    char ChessRow[100];
     gotoxy(0,BoardLocationY);
+    
     for(int i = 0;i<BoardSize;i++)
     {
-        if(i!=0) printf("\n          |────|────|────|────|────|────|────|────|────|────|────|────|────|────|─── |\n          ");
-        else printf("           ─────────────────────────────────────────────────────────────────────────\n          ");
-        // printf("\n          ─────────────────────────────────────────────────────────────────────────\n          ");
+        if(i==0) printf("                   ─────────────────────────────────────────────────────────────────────────\n                  ");
+        else printf("\n                  |────|────|────|────|────|────|────|────|────|────|────|────|────|────|─── |\n                  ");
         Sleep(10);
         for(int j = 0;j<BoardSize;j++)
         {
@@ -277,7 +360,7 @@ void GoBang::DrawBoard()
         printf("|");
         Sleep(10);
     }
-    printf("\n           ─────────────────────────────────────────────────────────────────────────\n");
+    printf("\n                   ─────────────────────────────────────────────────────────────────────────\n");
 
 }
 
@@ -323,7 +406,8 @@ void GoBang::DoublePlay()
     
     int choice;
     int step = 1;
-    Records records;
+    Record *record;
+    record = new Record;
     Point point;
     int x = 7,y = 7,player = 1;
     ChessBoard[x][y] = player;
@@ -338,12 +422,18 @@ void GoBang::DoublePlay()
         while(true)
         {
             choice = getch();
-            if( choice == 87 || choice == 119 ||
-                choice == 65 || choice == 97 ||
-                choice == 83 || choice == 115 ||
-                choice == 68 || choice == 100 ||
-                choice == 72 || choice == 80 ||
+            if( choice == 87 || choice == 119 ||    /* W */
+                choice == 81 || choice == 113 ||    /* Q */
+                choice == 69 || choice == 101 ||    /* E */
+                choice == 65 || choice == 97 ||     /* A */
+                choice == 90 || choice == 122 ||    /* Z */
+                choice == 83 || choice == 115 ||    /* D */
+                choice == 88 || choice == 118 ||    /* X */
+                choice == 68 || choice == 100 ||    /* S */
+                choice == 72 || choice == 80 ||      
+                choice == 97 || choice == 99 ||     /* 1 3 */
                 choice == 75 || choice == 77 ||
+                choice == 103 || choice == 105 ||   /* 7 9 */
                 choice == 13 || choice == 8 ||
                 choice == 27
             ) break;
@@ -354,18 +444,7 @@ void GoBang::DoublePlay()
         {
         case 87:
         case 119:
-            if(player != 1) break;
-            ChessBoard[x][y] = 0;
-            ClearPoint(x,y,player);
-            x = (x+BoardSize-1)%BoardSize;
-            while(ChessBoard[x][y])
-            {
-                x = (x+BoardSize-1)%BoardSize;
-            }
-            DrawPoint(x,y,player);
-            break;
         case 72:
-            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize-1)%BoardSize;
@@ -375,20 +454,10 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
+        
         case 65:
         case 97:
-            if(player != 1) break;
-            ChessBoard[x][y] = 0;
-            ClearPoint(x,y,player);
-            y = (y+BoardSize-1)%BoardSize;
-            while(ChessBoard[x][y])
-            {
-                y = (y+BoardSize-1)%BoardSize;
-            }
-            DrawPoint(x,y,player);
-            break;
         case 75:
-            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize-1)%BoardSize;
@@ -398,20 +467,10 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
+        
         case 83:
         case 115:
-            if(player != 1) break;
-            ChessBoard[x][y] = 0;
-            ClearPoint(x,y,player);
-            x = (x+BoardSize+1)%BoardSize;
-            while(ChessBoard[x][y])
-            {
-                x = (x+BoardSize+1)%BoardSize;
-            }
-            DrawPoint(x,y,player);
-            break;
         case 80:
-            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize+1)%BoardSize;
@@ -421,20 +480,10 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
+    
         case 68:
-        case 100:
-            if(player != 1) break;
-            ChessBoard[x][y] = 0;
-            ClearPoint(x,y,player);
-            y = (y+BoardSize+1)%BoardSize;
-            while(ChessBoard[x][y])
-            {
-                y = (y+BoardSize+1)%BoardSize;
-            }
-            DrawPoint(x,y,player);
-            break;
+        case 100: 
         case 77:
-            if(player != 2) break;
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize+1)%BoardSize;
@@ -444,13 +493,13 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-
+       
         case 8:
-            if(records.Count == 0) break;
+            if(record->Count == 0) break;
         
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
-            point = records.Withdraw();
+            point = record->Withdraw();
             x = point.x,y = point.y,player = point.player;
     
             DrawPoint(x,y,player);
@@ -459,15 +508,15 @@ void GoBang::DoublePlay()
         case 13:
             if(Win(x,y,2-player%2)){
                 gotoxy(0,40);
-
+                record->AddRecord(x,y,2-player%2);
+                records.AddRecords(record);
                 if(player == 1){ SetTextGreen();Cprintf("玩家一(绿方)获胜！");SetTextWhite();}
                 else {SetTextBlue(); Cprintf("玩家二(蓝方)获胜！");SetTextWhite();}
                 printf("\n\n");Cprintf("按Esc退出");
                 while(getch()!=27);
                 return;
             }
-            
-            records.AddRecord(x,y,player);
+            record->AddRecord(x,y,player);
 
             ChessBoard[x][y] = player++;
             player = 2-player%2;
@@ -476,12 +525,22 @@ void GoBang::DoublePlay()
             while(step<BoardSize)
             {
                 if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                    {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                    {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player); break;}
                 if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                    {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player); break;}
                 if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
+                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                    {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player); break;}
                 step++;
             }
             if(step == BoardSize) {
+                record->AddRecord(x,y,2-player%2);
+                records.AddRecords(record);
                 gotoxy(0,40);Cprintf("你故意和棋的样子真狼狈(≧?≦)?");
                 printf("\n\n");SetTextGreen();Cprintf("按Esc退出");SetTextWhite();
                 while(getch()!=27);
@@ -498,6 +557,91 @@ void GoBang::DoublePlay()
 
 }
 
+void GoBang::History(int delay)
+{
+    system("cls");
+    printf("\n\n\n");
+    Record *head = records.Head->next;
+    printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
+    printf("\n                      ");printf("    |序号\t|开始时间\t|结束时间\t|落子数\t|胜利方\t|");Sleep(delay);
+    int i = 1;
+    // string winner;
+    while(head){
+        printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
+        printf("\n                      ");
+
+        printf("    |   %d\t|   %02d:%02d:%02d\t|   %02d:%02d:%02d\t|  %d\t|",
+        i++,head->StartTime.tm_hour,head->StartTime.tm_min,head->StartTime.tm_sec,
+        head->EndTime.tm_hour,head->EndTime.tm_min,head->EndTime.tm_sec,head->Count
+        );
+
+        int winner = head->Points[head->Count-1].player;
+        if(winner == 1)
+        {
+            SetTextGreen();
+            printf("%s\t|","  ●");
+            SetTextWhite();
+        }else if(winner == 2)
+        {
+            SetTextBlue();
+            printf("%s\t|"," ●");
+            SetTextWhite();
+        }else{
+            printf("%s\t|","和棋");
+        }
+        head = head->next;
+    }
+    printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
+}
+
+void GoBang::Review(int id,int delay)
+{
+    system("cls");
+    Record *head = records.Head->next;
+    int i = 1;
+    while(head && i++ != id){
+        head = head->next;
+    }
+    DrawBoard();
+    i = 0;
+    while(i<head->Count)
+    {
+        Sleep(delay);
+        DrawPoint(head->Points[i].x, head->Points[i].y, head->Points[i].player);
+        i++;
+    }
+    gotoxy(56,38);
+    printf("\n\n");Cprintf("按Esc退出");
+    while(getch()!=27);
+
+}
+
+void GoBang::PrintHistory(int delay)
+{
+    
+    int id;
+    string str;
+    while(true)
+    {
+        History(delay);
+        printf("\n\n");
+        Cprintf("选0为退出查看");
+        printf("\n\n");
+        Cprintf("选择序号查看棋局:");
+        cin>>str;
+        while(!Regex(str))
+        {
+            printf("\n\n");
+            Cprintf("序号只能是数字:");
+            cin>>str;
+        }
+        id = atoi(str.c_str());
+        if(id>records.Count) continue;
+        if(id == 0) break;
+        Review(id,70);
+    }
+
+}
 
 void GoBang::ShowCursor(bool visible) { 
 
@@ -529,12 +673,12 @@ void GoBang::SetTextWhite()
 
 void GoBang::Mprintf(string str)
 {
-	cout<<setw(48)<<str;
+	cout<<setw(56)<<str;
 }
 
 void GoBang::Cprintf(string str)
 {
-	cout<<setw(48+str.length()/2)<<str;
+	cout<<setw(56+str.length()/2)<<str;
 }
 
 //取消最大化，最小化
@@ -555,7 +699,8 @@ void GoBang::DeleteGoAway(){
 void GoBang::goodbye()
 {
 	SetTextGreen();
-	printf("\n					   欢迎下次使用~\n");
+    printf("\n");
+	Cprintf("欢迎下次游玩~\n");
 	SetTextWhite();
 
     Sleep(3000);
