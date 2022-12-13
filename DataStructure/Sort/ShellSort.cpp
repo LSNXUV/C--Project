@@ -27,11 +27,11 @@ void ShellSort(int data[],int n,int Darr[],int Dnum)
         }
         d = Darr[dnum];
 
-        for(int i = 0;i<n;i++)
+        /* for(int i = 0;i<n;i++)
         {
             cout<<std::right<<setw(4)<<data[i];
         }
-        cout<<endl;
+        cout<<endl; */
         
     }
 
