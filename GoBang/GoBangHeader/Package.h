@@ -7,6 +7,6 @@
 #include <cmath>
 #include <regex>
 
-using namespace std;
-
 #define MaxSize 70
+
+using namespace std;
