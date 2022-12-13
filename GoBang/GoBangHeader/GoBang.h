@@ -403,7 +403,6 @@ void GoBang::DoublePlay()
     
     Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)    Enter 确认落子    Backspace 悔棋    Esc 退出游戏");Sleep(20);
     
-    
     int choice;
     int step = 1;
     Record *record;
@@ -428,12 +427,12 @@ void GoBang::DoublePlay()
                 choice == 65 || choice == 97 ||     /* A */
                 choice == 90 || choice == 122 ||    /* Z */
                 choice == 83 || choice == 115 ||    /* D */
-                choice == 88 || choice == 118 ||    /* X */
+                choice == 88 || choice == 120 ||    /* X */
                 choice == 68 || choice == 100 ||    /* S */
                 choice == 72 || choice == 80 ||      
-                choice == 97 || choice == 99 ||     /* 1 3 */
+                choice == 49 || choice == 51 ||     /* 1 3 */
                 choice == 75 || choice == 77 ||
-                choice == 103 || choice == 105 ||   /* 7 9 */
+                choice == 55 || choice == 57 ||   /* 7 9 */
                 choice == 13 || choice == 8 ||
                 choice == 27
             ) break;
@@ -445,6 +444,7 @@ void GoBang::DoublePlay()
         case 87:
         case 119:
         case 72:
+            /* 上移 */
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize-1)%BoardSize;
@@ -454,10 +454,23 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-        
+        case 81:
+        case 113:
+        case 55:
+            /* 左上方移动 */
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
         case 65:
         case 97:
         case 75:
+            /* 左移 */
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize-1)%BoardSize;
@@ -467,10 +480,23 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-        
+        case 69:
+        case 101:
+        case 57:
+            /* 右上方移动 */
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
         case 83:
         case 115:
         case 80:
+            /* 下移  */
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             x = (x+BoardSize+1)%BoardSize;
@@ -480,10 +506,23 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-    
+        case 90:
+        case 122:
+        case 49:
+            /* 左下方移动 */
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
         case 68:
         case 100: 
         case 77:
+            /* 右移 */
             ChessBoard[x][y] = 0;
             ClearPoint(x,y,player);
             y = (y+BoardSize+1)%BoardSize;
@@ -493,7 +532,19 @@ void GoBang::DoublePlay()
             }
             DrawPoint(x,y,player);
             break;
-       
+        case 88:
+        case 120:
+        case 51:
+            /* 右下方移动 */
+            ChessBoard[x][y] = 0;
+            ClearPoint(x,y,player);
+            x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
+            while(ChessBoard[x][y])
+            {
+                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+            }
+            DrawPoint(x,y,player);
+            break;
         case 8:
             if(record->Count == 0) break;
         
