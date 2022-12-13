@@ -16,7 +16,7 @@ class Record
 public:
     Time StartTime;
     Time EndTime;
-    Point Points[225];
+    Point Points[230];
     int Count;
     
     Record *next;

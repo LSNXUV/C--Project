@@ -29,7 +29,8 @@ class GoBang
         void DrawWinPoint(int x,int y);
         void ClearPoint(int x,int y,int player);
         void DrawPoint(int x,int y,int player);
-
+        void DrawActPoint(int x,int y,int player);
+        void DrawActStep(int x,int y,int step);
         //双人对战
         bool Win(int x,int y,int player);
         void DoublePlay();
@@ -50,6 +51,7 @@ class GoBang
 
         void Mprintf(string str);
         void Cprintf(string str);
+        void Slowprintf(string str);
 
         void DeleteGoAway();
         void SizeGoAway();
@@ -375,7 +377,23 @@ void GoBang::DrawPoint(int x,int y,int player)
 {
     gotoxy(BoardLocationX+2+5*y,BoardLocationY+1+x*2);
     if(player == 1) {SetTextGreen();printf("●");SetTextWhite();}
-    else {SetTextBlue();printf("●");SetTextWhite();}
+    else if(player == 2) {SetTextBlue();printf("●");SetTextWhite();}
+    else printf("●");
+}
+
+//当前执子
+void GoBang::DrawActPoint(int x,int y,int player)
+{
+    gotoxy(x,y);
+    if(player == 1) {SetTextGreen();printf("●");SetTextWhite();}
+    else if(player == 2) {SetTextBlue();printf("●");SetTextWhite();}
+    else printf("●");
+}
+
+void GoBang::DrawActStep(int x,int y,int step)
+{
+    gotoxy(x,y);
+    printf("%d  ",step);
 }
 
 void GoBang::ClearPoint(int x,int y,int player)
@@ -390,7 +408,7 @@ void GoBang::DoublePlay()
 
     printf("\n\n");
     SetTextGreen();
-    Cprintf("欢迎来到五子棋终结者，按任意键开始游戏");
+    Slowprintf("欢迎来到五子棋终结者，按任意键开始游戏");
     SetTextWhite();
     getch();
 
@@ -403,7 +421,7 @@ void GoBang::DoublePlay()
     
     Cprintf("w a s d (绿方) / ↑ ← ↓ → (蓝方)    Enter 确认落子    Backspace 悔棋    Esc 退出游戏");Sleep(20);
     
-    int choice;
+    int choice,ActStep = 0;
     int step = 1;
     Record *record;
     record = new Record;
@@ -413,6 +431,14 @@ void GoBang::DoublePlay()
 
     DrawBoard();
     DrawPoint(x,y,player);
+
+    
+    DrawActPoint(102,16,player);Sleep(20);DrawActStep(102,20,ActStep);Sleep(20);
+    gotoxy(99,14);
+    printf("当前执子");Sleep(20);
+    gotoxy(99,18);
+    printf("当前步数");Sleep(20);
+    
     while(true)
     {
         
@@ -432,7 +458,7 @@ void GoBang::DoublePlay()
                 choice == 72 || choice == 80 ||      
                 choice == 49 || choice == 51 ||     /* 1 3 */
                 choice == 75 || choice == 77 ||
-                choice == 55 || choice == 57 ||   /* 7 9 */
+                choice == 55 || choice == 57 ||     /* 7 9 */
                 choice == 13 || choice == 8 ||
                 choice == 27
             ) break;
@@ -489,7 +515,7 @@ void GoBang::DoublePlay()
             x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
-                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
             }
             DrawPoint(x,y,player);
             break;
@@ -515,7 +541,7 @@ void GoBang::DoublePlay()
             x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
             while(ChessBoard[x][y])
             {
-                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+                x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
             }
             DrawPoint(x,y,player);
             break;
@@ -541,7 +567,7 @@ void GoBang::DoublePlay()
             x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
             while(ChessBoard[x][y])
             {
-                x = (x+BoardSize-1)%BoardSize;y = (y+BoardSize-1)%BoardSize;
+                x = (x+BoardSize+1)%BoardSize;y = (y+BoardSize+1)%BoardSize;
             }
             DrawPoint(x,y,player);
             break;
@@ -554,10 +580,13 @@ void GoBang::DoublePlay()
             x = point.x,y = point.y,player = point.player;
     
             DrawPoint(x,y,player);
+            DrawActPoint(102,16,player);
+            DrawActStep(102,20,--ActStep);
             break;
 
         case 13:
             if(Win(x,y,2-player%2)){
+                DrawActStep(102,20,++ActStep);
                 gotoxy(0,40);
                 record->AddRecord(x,y,2-player%2);
                 records.AddRecords(record);
@@ -571,6 +600,9 @@ void GoBang::DoublePlay()
 
             ChessBoard[x][y] = player++;
             player = 2-player%2;
+
+            DrawActPoint(102,16,player);
+            DrawActStep(102,20,++ActStep);
             step = 0;
 
             while(step<BoardSize)
@@ -591,6 +623,7 @@ void GoBang::DoublePlay()
             }
             if(step == BoardSize) {
                 record->AddRecord(x,y,2-player%2);
+                record->AddRecord(x,y,0);
                 records.AddRecords(record);
                 gotoxy(0,40);Cprintf("你故意和棋的样子真狼狈(≧?≦)?");
                 printf("\n\n");SetTextGreen();Cprintf("按Esc退出");SetTextWhite();
@@ -613,15 +646,15 @@ void GoBang::History(int delay)
     system("cls");
     printf("\n\n\n");
     Record *head = records.Head->next;
-    printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
-    printf("\n                      ");printf("    |序号\t|开始时间\t|结束时间\t|落子数\t|胜利方\t|");Sleep(delay);
+    printf("\n                       ");printf("    ────────────────────────────────────────────────────");Sleep(delay);
+    printf("\n                      ");printf("    |序号\t|   开始时间\t|   结束时间\t|落子数\t|胜利方\t|");Sleep(delay);
     int i = 1;
     // string winner;
     while(head){
-        printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
+        printf("\n                       ");printf("    ────────────────────────────────────────────────────");Sleep(delay);
         printf("\n                      ");
 
-        printf("    |   %d\t|   %02d:%02d:%02d\t|   %02d:%02d:%02d\t|  %d\t|",
+        printf("    |  %d\t|   %02d:%02d:%02d\t|   %02d:%02d:%02d\t|  %d\t|",
         i++,head->StartTime.tm_hour,head->StartTime.tm_min,head->StartTime.tm_sec,
         head->EndTime.tm_hour,head->EndTime.tm_min,head->EndTime.tm_sec,head->Count
         );
@@ -635,14 +668,14 @@ void GoBang::History(int delay)
         }else if(winner == 2)
         {
             SetTextBlue();
-            printf("%s\t|"," ●");
+            printf("%s\t|","  ●");
             SetTextWhite();
         }else{
-            printf("%s\t|","和棋");
+            printf("%s\t|"," 和棋");
         }
         head = head->next;
     }
-    printf("\n                       ");printf("    ────────────────────────────────────────────────────────");Sleep(delay);
+    printf("\n                       ");printf("    ────────────────────────────────────────────────────");Sleep(delay);
 }
 
 void GoBang::Review(int id,int delay)
@@ -731,6 +764,19 @@ void GoBang::Cprintf(string str)
 {
 	cout<<setw(56+str.length()/2)<<str;
 }
+
+void GoBang::Slowprintf(string str)
+{
+    const char *Str = str.c_str();
+    cout<<setw(20+strlen(Str)/2);
+
+    for(int i=0; i<str.length();i++)
+    {
+        cout<<Str[i];
+        Sleep(20);
+    }
+}
+
 
 //取消最大化，最小化
 void GoBang::SizeGoAway() {
