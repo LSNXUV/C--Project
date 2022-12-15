@@ -54,7 +54,8 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "random": "cpp"
     },
     "files.encoding": "utf8",
     "C_Cpp.errorSquiggles": "enabled"

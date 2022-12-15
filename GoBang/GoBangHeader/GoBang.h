@@ -408,9 +408,9 @@ void GoBang::DoublePlay()
 
     printf("\n\n");
     SetTextGreen();
-    Slowprintf("欢迎来到五子棋终结者，按任意键开始游戏");
+    Slowprintf("欢迎来到五子棋终结者,按Enter开始游戏");
     SetTextWhite();
-    getch();
+    while(getch()!=13);
 
     system("cls");
     
@@ -426,13 +426,19 @@ void GoBang::DoublePlay()
     Record *record;
     record = new Record;
     Point point;
+
+    //random
+    default_random_engine engine(time(0));
+    uniform_real_distribution<double> random(0.0, 1.0);
+
+    //初始位置
     int x = 7,y = 7,player = 1;
     ChessBoard[x][y] = player;
 
     DrawBoard();
     DrawPoint(x,y,player);
 
-    
+    //输出当前执子和步数
     DrawActPoint(102,16,player);Sleep(20);DrawActStep(102,20,ActStep);Sleep(20);
     gotoxy(99,14);
     printf("当前执子");Sleep(20);
@@ -585,6 +591,9 @@ void GoBang::DoublePlay()
             break;
 
         case 13:
+
+            PlaySound(TEXT("progress.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
             if(Win(x,y,2-player%2)){
                 DrawActStep(102,20,++ActStep);
                 gotoxy(0,40);
@@ -607,18 +616,26 @@ void GoBang::DoublePlay()
 
             while(step<BoardSize)
             {
-                if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
-                    {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player); break;}
-                if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
-                    {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
-                    {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player); break;}
-                if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player); break;}
-                if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
-                    {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player); break;}
+                if(random(engine)<=0.125)
+                    if(!ChessBoard[(x+BoardSize-step)%BoardSize][y]) {x=(x+BoardSize-step)%BoardSize; DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.250)
+                    if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                        {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.375)
+                    if(!ChessBoard[x][(y+BoardSize-step)%BoardSize]) {y=(y+BoardSize-step)%BoardSize; DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.50)
+                    if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                        {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize-step)%BoardSize;DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.625)
+                    if(!ChessBoard[(x+BoardSize+step)%BoardSize][y]) {x=(x+BoardSize+step)%BoardSize; DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.750)
+                    if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                        {x=(x+BoardSize-step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=0.875)
+                    if(!ChessBoard[x][(y+BoardSize+step)%BoardSize]) {y=(y+BoardSize+step)%BoardSize; DrawPoint(x,y,player);step++; break;}
+                if(random(engine)<=1.00)
+                    if(!ChessBoard[(x+BoardSize-step)%BoardSize][(y+BoardSize-step)%BoardSize]) 
+                        {x=(x+BoardSize+step)%BoardSize;y=(y+BoardSize+step)%BoardSize;DrawPoint(x,y,player);step++; break;}
                 step++;
             }
             if(step == BoardSize) {
