@@ -17,7 +17,6 @@ class Records
 
         bool RemoveRecords(int id);
 
-        
         Records(/* args */);
         ~Records();
 
@@ -35,7 +34,6 @@ Records::Records()
 Records::~Records(){
 
 }
-
 
 
 

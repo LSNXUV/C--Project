@@ -1,4 +1,5 @@
-#include <stdio.h>
+
+#include <iostream>
 
 void reverseArr(int *arr, int n)
 {
@@ -22,7 +23,7 @@ int main(){
     printf("*");
     for(i=0;i<n;i++){
         printf("%d ", arr[i]);
-    }
-
+    }   
+    system("pause");
     return 0;
 }

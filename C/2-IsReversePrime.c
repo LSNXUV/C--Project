@@ -7,6 +7,7 @@ int pd(int x){//判断是否为素数
 		if(x%i==0) return 0;			
 	return 1;
 }
+
 int ns(int x){//逆序 
 	int y=0;
 	while(x>0){
@@ -15,6 +16,7 @@ int ns(int x){//逆序
 	}
 	return y;
 }
+
 int main()
 {
 	int x;
